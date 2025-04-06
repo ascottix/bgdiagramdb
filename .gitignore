@@ -1,0 +1,15 @@
+# Build output
+dist/
+
+# Temp files
+*.log
+*.tmp
+
+# Mac stuff
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Node
+node_modules/
