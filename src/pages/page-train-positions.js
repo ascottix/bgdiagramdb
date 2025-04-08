@@ -89,7 +89,7 @@ button > small {
         const duecards = await app.db.findDueCards(idCollection, null, true);
 
         translateComponent(this, { newcards, duecards });
-        this.$('button').disabled = (newcards + duecards) == 0;
+        this.$('[data-action="start"]').disabled = (newcards + duecards) == 0;
     }
 
     async appendDueCardsToDeck(now) {
