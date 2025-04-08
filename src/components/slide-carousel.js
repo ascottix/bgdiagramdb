@@ -30,7 +30,7 @@ export class SlideCarousel extends BaseComponent {
 
     resetHtml() {
         this.innerHTML = `
-<div id="slideCarousel" class="carousel slide" data-bs-touch="true" data-bs-interval="false">
+<div id="slideCarousel" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
     <div class="carousel-inner">
         <div class="carousel-item active" data-slide="0"></div>
         <div class="carousel-item" data-slide="1"></div>
