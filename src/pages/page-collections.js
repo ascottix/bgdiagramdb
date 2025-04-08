@@ -71,15 +71,20 @@ class PageCollections extends BaseComponent {
 <div class="row p-1 pt-2${index == collections.length - 1 ? '' : ' border-bottom'}">
     <div class="col-12 col-md-3">${coll.name}</div>
     <div class="col-12 col-md-6">${coll.desc || ''}</div>
-    <div class="col-12 col-lg-2 col-md-1">${coll.size}</div>
+    <div class="col-12 col-lg-2 col-md-1"><span class="d-md-none">${t('positions')}: </span>${coll.size}</div>
     <div data-coll-id="${coll.id}" class="col-12 col-md-1 d-flex gap-2 align-items-start">
         <a data-action="view" href="#positions?collection=${coll.id}" title="${t('tooltip-view-collection')}" class="btn btn-outline-success btn-sm"><i class="bi bi-eye-fill"></i></a>
-        <div class="btn-group">
+        <!-- When on mobile, show all the buttons on a separate line -->
+        <button data-action="edit" title="${t('tooltip-edit-collection')}" class="d-md-none pe-0 btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill me-2"></i></button>
+        <button data-action="delete" title="${t('tooltip-delete-collection')}" class="d-md-none pe-0 btn btn-outline-secondary btn-sm"><i class="bi bi-trash-fill me-2"></i></button>
+        <button data-action="export" title="${t('tooltip-export-collection')}" class="d-md-none pe-0 btn btn-outline-secondary btn-sm"><i class="bi bi-box-arrow-down me-2"></i></button>
+        <!-- When on desktop, show the buttons in a column, in a dropdown menu -->
+        <div class="btn-group d-none d-md-inline">
             <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><button data-action="edit" title="${t('tooltip-edit-collection')}" class="dropdown-item" href="#"><i class="bi bi-pencil-fill me-2"></i>${t('edit')}</button></li>
                 <li><button data-action="delete" title="${t('tooltip-delete-collection')}" class="dropdown-item" href="#"><i class="bi bi-trash-fill me-2"></i>${t('delete')}</button></li>
-                <li><button data-action="export" class="dropdown-item" href="#"><i class="bi bi-box-arrow-down me-2"></i>${t('export')}</button></li>
+                <li><button data-action="export" title="${t('tooltip-export-collection')}" class="dropdown-item" href="#"><i class="bi bi-box-arrow-down me-2"></i>${t('export')}</button></li>
             </ul>
         </div>
     </div>
