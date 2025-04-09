@@ -25,7 +25,6 @@ export const EnCatalog = {
         "back-to-grid": "Back to positions list",
         "bold": "Bold",
         "cancel": "Cancel",
-        "continue": "Continue",
         "category": "Category",
         "choose-collection": "Choose a collection",
         "close": "Close",
