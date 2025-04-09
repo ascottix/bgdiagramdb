@@ -22,6 +22,7 @@ import { DataTranslate, t, translateComponent } from '../utils/lang.js';
 import { Idb } from '../utils/indexeddb.js';
 import { getDataAttributes, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
 import { synchSpacedRepetitionFlag } from '../utils/db-utils.js';
+import { getQueryParams, setQueryParams } from '../utils/router.js';
 
 import { BaseComponent } from '../components/base-component.js';
 import '../components/positions-filter.js';
@@ -75,10 +76,8 @@ class PagePositions extends BaseComponent {
 
     positionsCursorFactory() {
         if (!this._filter.category) {
-            console.log('getPositionsIndexByCollection', this._filter.collection);
             return app.db.getPositionsIndexByCollection().openCursor(this._filter.collection || undefined);
         } else {
-            console.log('getPositionsIndexByCategory');
             return app.db.getPositionsIndexByCategory().openCursor(this._filter.category);
         }
     }
@@ -86,7 +85,6 @@ class PagePositions extends BaseComponent {
     positionsFilterFactory() {
         // If both collection and category are selected, index is by category and we need to filter by collection
         if (this._filter.category && this._filter.collection) {
-            console.log('filter by collection');
             return (pos) => pos.id_coll == this._filter.collection;
         }
     }
@@ -130,9 +128,20 @@ class PagePositions extends BaseComponent {
             'positions-found': this._pagerSize.count,
         });
 
-        this.updatePage();
+        // Update content
+        if (getQueryParams().mode == 'browser') {
+            // If invoked in browser mode, show the first position
+            setQueryParams({ mode: '' });
+            const page = await this._pager.read();
+            if (page.data.length > 0) {
+                this.viewPosition(page.data[0].id);
+            }
+        } else {
+            // Show the current page
+            this.updatePage();
+        }
 
-        // Remove spinner and display results
+        // Remove spinner
         clearTimeout(spinTimer);
         spinner.classList.add('d-none');
         content.classList.remove('d-none');

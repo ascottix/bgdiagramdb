@@ -68,12 +68,12 @@ class PageCollections extends BaseComponent {
 
         collections.forEach((coll, index) => {
             html.push(`
-<div class="row p-1 pt-2${index == collections.length - 1 ? '' : ' border-bottom'}">
+<div class="row ${index == collections.length - 1 ? '' : 'border-bottom'} p-1 pt-2">
     <div class="col-12 col-md-3">${coll.name}</div>
     <div class="col-12 col-md-6">${coll.desc || ''}</div>
     <div class="col-12 col-lg-2 col-md-1"><span class="d-md-none">${t('positions')}: </span>${coll.size}</div>
     <div data-coll-id="${coll.id}" class="col-12 col-md-1 d-flex gap-2 align-items-start">
-        <a data-action="view" href="#positions?collection=${coll.id}" title="${t('tooltip-view-collection')}" class="btn btn-outline-success btn-sm"><i class="bi bi-eye-fill"></i></a>
+        <a data-action="view" href="#positions?collection=${coll.id}&mode=browser" title="${t('tooltip-view-collection')}" class="btn ${coll.size > 0 ? '' : 'disabled'} btn-outline-success btn-sm"><i class="bi bi-eye-fill"></i></a>
         <!-- When on mobile, show all the buttons on a separate line -->
         <button data-action="edit" title="${t('tooltip-edit-collection')}" class="d-md-none pe-0 btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill me-2"></i></button>
         <button data-action="delete" title="${t('tooltip-delete-collection')}" class="d-md-none pe-0 btn btn-outline-secondary btn-sm"><i class="bi bi-trash-fill me-2"></i></button>
