@@ -43,15 +43,11 @@ class App {
     }
 
     async init() {
-        console.log('Initializing the application...');
-
         // Open the database
         this.db = await BgDiagramDb.open();
 
         // Load settings
         await this.refreshSettings();
-
-        console.log('Application initialized');
     }
 
     async refreshSettings() {

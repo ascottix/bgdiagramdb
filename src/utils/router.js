@@ -21,6 +21,7 @@ import { removeTooltip } from './helpers.js';
 
 /**
  * Removes the query string from the hash part of the URL.
+ *
  * @param {string} hash - The hash string from which the query will be removed.
  * @returns {string} - The hash string without the query.
  */
@@ -30,6 +31,7 @@ export function removeQueryFromHash(hash) {
 
 /**
  * Retrieves query parameters from the hash part of the URL.
+ *
  * @returns {Object} - An object containing the query parameters.
  */
 export function getQueryParams() {
@@ -47,6 +49,7 @@ export function getQueryParams() {
 
 /**
  * Sets query parameters in the hash part of the URL.
+ *
  * @param {Object} params - An object containing the query parameters to be set.
  */
 export function setQueryParams(params) {
@@ -68,6 +71,7 @@ export function updateQueryParams(params) {
 
 /**
  * Shows a specific page by updating the page content.
+ *
  * @param {string} page - The page identifier to be shown.
  */
 export function showPage(page) {
@@ -80,6 +84,7 @@ export function showPage(page) {
 
 /**
  * Sets the active page by updating the hash part of the URL.
+ *
  * @param {string} page - The page identifier to be set as active.
  */
 export function setActivePage(page) {

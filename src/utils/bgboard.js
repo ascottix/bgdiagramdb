@@ -399,9 +399,4 @@ export class BgBoard {
 
         return out.join('\n');
     }
-
-    // Print the board
-    print() {
-        console.log(this.toDiagram());
-    }
 }
