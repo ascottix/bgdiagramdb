@@ -20,7 +20,7 @@
 import { app } from '../app.js';
 import { DataTranslate, t, translateComponent } from '../utils/lang.js';
 import { downloadDataAsJson, initTooltips, showToast } from '../utils/helpers.js';
-import { exportCollection, importCollection, synchSpacedRepetitionFlag } from '../utils/db-utils.js';
+import { exportCollection, importCollection, sanitizeCollection, synchSpacedRepetitionFlag } from '../utils/db-utils.js';
 
 import { BaseComponent } from '../components/base-component.js';
 import '../modals/modal-edit-collection.js';
@@ -137,7 +137,7 @@ class PageCollections extends BaseComponent {
             // Create new collection
             const data = await this.$('modal-edit-collection').open(t('new-collection'), t('create'), {});
             if (data) {
-                await app.db.createCollection(data);
+                await app.db.createCollection(sanitizeCollection(data));
                 this.refresh();
             }
         });
@@ -163,7 +163,7 @@ class PageCollections extends BaseComponent {
                 const data = await this.$('modal-edit-collection').open(t('edit-collection'), t('save'), collection);
                 if (data) {
                     data.id = collId;
-                    await app.db.updateCollection(data);
+                    await app.db.updateCollection(sanitizeCollection(data));
                     synchSpacedRepetitionFlag(app.db, collId);
                     this.refresh();
                     showToast(t('toast-collection-updated', collection));

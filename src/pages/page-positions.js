@@ -21,7 +21,7 @@ import { app } from '../app.js';
 import { DataTranslate, t, translateComponent } from '../utils/lang.js';
 import { Idb } from '../utils/indexeddb.js';
 import { getDataAttributes, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
-import { synchSpacedRepetitionFlag } from '../utils/db-utils.js';
+import { sanitizePosition, synchSpacedRepetitionFlag } from '../utils/db-utils.js';
 import { getQueryParams, setQueryParams } from '../utils/router.js';
 
 import { BaseComponent } from '../components/base-component.js';
@@ -207,7 +207,7 @@ class PagePositions extends BaseComponent {
                             const data = await this.querySelector('modal-edit-position').open(t('new-position'), t('add'), { title: '', xgid: '', cat: '', question: '', comment: '' });
                             if (data) {
                                 data.id_coll = Number(data.id_coll);
-                                data.id = await app.db.addPosition(data);
+                                data.id = await app.db.addPosition(sanitizePosition(data));
                                 synchSpacedRepetitionFlag(app.db, data.id_coll, data);
                                 showToast(t('toast-position-added'));
                                 this.refresh();
@@ -230,7 +230,7 @@ class PagePositions extends BaseComponent {
                             if (data) {
                                 data.id = pos.id;
                                 data.id_coll = Number(data.id_coll);
-                                await app.db.updatePosition(data);
+                                await app.db.updatePosition(sanitizePosition(data));
                                 synchSpacedRepetitionFlag(app.db, data.id_coll, data);
                                 this.refresh();
                                 showToast(t('toast-position-updated'));

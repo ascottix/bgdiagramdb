@@ -21,7 +21,7 @@ import { sanitizeHtml } from './fields.js';
 import { State } from './fsrs45.js';
 import { Idb } from './indexeddb.js';
 
-function sanitizeCollection(coll) {
+export function sanitizeCollection(coll) {
     coll.name = sanitizeHtml(coll.name);
     coll.desc = sanitizeHtml(coll.desc);
     coll.sr = !!coll.sr;
@@ -29,7 +29,7 @@ function sanitizeCollection(coll) {
     return coll;
 }
 
-function sanitizePosition(pos) {
+export function sanitizePosition(pos) {
     pos.title = sanitizeHtml(pos.title);
     pos.xgid = sanitizeHtml(pos.xgid);
     if (!Array.isArray(pos.tags)) pos.tags = [];
