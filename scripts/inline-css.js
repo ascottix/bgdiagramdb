@@ -9,7 +9,7 @@ const css = await fs.readFile(cssPath, 'utf8');
 
 const inlinedHtml = html.replace(
   /<link\s+rel="stylesheet"\s+href="css\/styles\.css"\s*\/?>/,
-  `<style>\n${css}</style>`
+  `<style>\n${css.replace(/\/\*.*?\*\//g, '\n  ').replace(/\s+\n/g, '\n').replace(/^\s+/gm, '')}</style>`
 );
 
 await fs.writeFile(htmlPath, inlinedHtml);
