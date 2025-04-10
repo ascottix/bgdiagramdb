@@ -35,7 +35,7 @@ export class TaglistInputField extends HTMLElement {
   <label for="${this._tagInputId}" class="form-label">${this.getAttribute('label')}</label>
   <div class="form-control d-flex flex-wrap gap-2" id="${this._tagContainerId}" style="min-height: 3rem;">
     <!-- ...tag chips... -->
-    <input type="text" class="border-0 flex-grow-1" id="${this._tagInputId}" placeholder="${t('placeholder-add-tag')}" list="${this._tagSuggestionsId}">
+    <input type="text" class="border-0 flex-grow-1 bg-body" id="${this._tagInputId}" placeholder="${t('placeholder-add-tag')}" list="${this._tagSuggestionsId}">
     <datalist id="${this._tagSuggestionsId}"></datalist>
   </div>
 </div>
