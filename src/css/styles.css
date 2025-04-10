@@ -26,7 +26,7 @@ body {
 
 /* BgDiagram */
 .bgdiagram__background {
-    fill: white;
+    fill: white !important;
 }
 
 .bgd-hide-pipcount .bgdiagram__text--pipcount {
