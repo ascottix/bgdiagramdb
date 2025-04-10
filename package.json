@@ -7,7 +7,10 @@
   "scripts": {
     "clean": "rm -fR dist",
     "lint": "npx eslint src",
-    "build": "npm run clean && rollup -c && node scripts/clean-html-templates.js && node scripts/cache-bust.js"
+    "build": "npm run clean && rollup -c && npm run build-inline-css && npm run build-clean-html && npm run build-bust-cache && mv dist/assets/favicon.ico dist",
+    "build-inline-css": "node scripts/inline-css.js",
+    "build-clean-html": "node scripts/clean-html-templates.js",
+    "build-bust-cache": "node scripts/cache-bust.js"
   },
   "keywords": [],
   "author": "Alessandro Scotti",
