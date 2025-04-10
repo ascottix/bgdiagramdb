@@ -142,8 +142,7 @@ button > small {
         setTimeout(() => { // Allow the card animation to complete
             this.hide('[data-action="show-answer"]');
             this.$$('[data-mode="card-back"]').forEach(e => this.show(e));
-            const isAdvanced = !!app.settings[Settings.TrainPosRatingSystem];
-            this.$$(`[data-ui="${isAdvanced ? 's' : 'a'}"]`).forEach(e => this.hide(e));
+            this.$$(`[data-ui="${this._isAdvanced ? 's' : 'a'}"]`).forEach(e => this.hide(e));
         }, 550);
     }
 
@@ -193,10 +192,12 @@ button > small {
     }
 
     async connectedCallback() {
+        this._isAdvanced = !!app.settings[Settings.TrainPosRatingSystem];
+
         // Init the user interface
         this.$('collapsible-howto').description = `
 ${t('train-pos-intro')}
-<div class="alert alert-info d-flex align-items-start gap-2 mt-4" role="alert">
+<div class="${this._isAdvanced ? 'alert alert-info d-flex align-items-start gap-2 mt-4' : 'd-none'}" role="alert">
     <i class="bi bi-info-circle fs-4"></i>
     <div>${t('train-pos-advanced-note')}</div>
 </div>`;
