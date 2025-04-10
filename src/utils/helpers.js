@@ -47,7 +47,7 @@ export async function showModal(modalElement, validateAction = () => true) {
         function onButtonClick(event) {
             if (event.target.tagName != 'BUTTON') return;
 
-            const action = event.target.getAttribute('data-action') || '';
+            const action = event.target.getAttribute('data-action');
 
             if (validateAction(action)) {
                 resolve(action);
@@ -122,7 +122,7 @@ const TooltipOptions = {
  */
 export function initTooltips(element, options = {}) {
     element.querySelectorAll('[title]').forEach(e => {
-        new window.bootstrap.Tooltip(e, {...TooltipOptions, ...options});
+        new window.bootstrap.Tooltip(e, { ...TooltipOptions, ...options });
     });
 }
 

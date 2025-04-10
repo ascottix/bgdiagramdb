@@ -45,13 +45,13 @@ class ModalEditPosition extends HTMLElement {
           <div class="col-md-6">
             <select-field name="id_coll" label="${t('collection')}"></select-field>
             <input-field name="title" label="${t('title')}"></input-field>
-            <combobox-field name="cat" label="${t('category')}"></combobox-field>
+            <taglist-input-field ${DataField}="tags" label="${t('tags')}"></taglist-input-field>
             <input-field name="xgid" label="XGID"></input-field>
           </div>
           <!-- Diagram -->
           <div class="col-md-6">
             <span class="form-label">${t('diagram')}</span>
-            <div data-diagram class="border rounded overflow-hidden"></div>
+            <div data-diagram class="border rounded overflow-hidden mt-1"></div>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ class ModalEditPosition extends HTMLElement {
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary">${t('cancel')}</button>
+        <button type="button" data-action="cancel" class="btn btn-secondary">${t('cancel')}</button>
         <button type="submit" data-action="save" class="btn btn-primary">${t('save')}</button>
       </div>
     </div>
@@ -106,10 +106,10 @@ class ModalEditPosition extends HTMLElement {
         collections.unshift({ id: 0, name: t('choose-collection') });
         this.querySelector('select-field[name="id_coll"]').set(collections.map(coll => ({ value: coll.id, text: coll.name })));
 
-        // Populate category combobox
+        // Populate category suggestions
         const categories = await app.db.getUniquePositionCategories();
         categories.sort((a, b) => a.localeCompare(b));
-        this.querySelector('combobox-field[name="cat"]').set(categories);
+        this.querySelector('taglist-input-field').setSuggestions(categories);
 
         populateFields(this, data);
 
@@ -119,18 +119,11 @@ class ModalEditPosition extends HTMLElement {
 
         this.refreshDiagram();
 
-        // TODO: remove the listeners
         this.addEventListener('paste', (event) => {
             const target = event.target;
             if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') return;
 
             let pastedText = (event.clipboardData || window.clipboardData).getData('text');
-
-            // if (BgBoard.isValidGnuBgId(pastedText)) { // Convert GNU Backgammon ID to XGID
-            //     const board = new BgBoard();
-            //     board.setFromGnuBgId(pastedText);
-            //     pastedText = board.get();
-            // }
 
             if (BgBoard.isValidGnuBgId(pastedText) || BgBoard.isValidXgid(pastedText)) {
                 this.querySelector('[data-field="xgid"]').value = pastedText;
@@ -145,7 +138,6 @@ class ModalEditPosition extends HTMLElement {
         const action = await showModal(this.querySelector('.modal'), (action) => {
             if (action == 'save') {
                 return validateFields(this, (data, errors) => {
-                    console.log('Validating', data);
                     if (!Number(data.id_coll)) errors.push({ id_coll: '' });
                     if (!data.title) errors.push({ title: '' });
                     if (!data.xgid) errors.push({ title: '' });
@@ -153,8 +145,11 @@ class ModalEditPosition extends HTMLElement {
                 });
             }
 
-            return true;
+            return action == 'cancel';
         });
+
+        // TODO: remove the listeners
+        // TODO: remove the tooltips
 
         return action == 'save' ? collectFields(this) : null;
     }

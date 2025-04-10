@@ -204,7 +204,7 @@ class PagePositions extends BaseComponent {
                     case 'add-new':
                         {
                             // Add new position
-                            const data = await this.querySelector('modal-edit-position').open(t('new-position'), t('add'), { title: '', xgid: '', cat: '', question: '', comment: '' });
+                            const data = await this.querySelector('modal-edit-position').open(t('new-position'), t('add'), { title: '', xgid: '', tags: [], question: '', comment: '' });
                             if (data) {
                                 data.id_coll = Number(data.id_coll);
                                 data.id = await app.db.addPosition(sanitizePosition(data));
