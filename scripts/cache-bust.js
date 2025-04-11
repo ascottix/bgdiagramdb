@@ -6,16 +6,16 @@ const distDir = 'dist';
 const originalBundle = path.join(distDir, 'bundle.js');
 const indexHtmlPath = path.join(distDir, 'index.html');
 
-// 1. Get bundle hash
+// Get bundle hash
 const data = await fs.readFile(originalBundle);
 const hash = crypto.createHash('md5').update(data).digest('hex').slice(0, 8);
 
-// 2. Rename bundle
+// Rename bundle
 const newBundleName = `bundle.${hash}.js`;
 const newBundlePath = path.join(distDir, newBundleName);
 await fs.rename(originalBundle, newBundlePath);
 
-// 3. Update index.html
+// Update index.html
 let html = await fs.readFile(indexHtmlPath, 'utf8');
 html = html.replace(/bundle\.js/g, newBundleName);
 await fs.writeFile(indexHtmlPath, html);
