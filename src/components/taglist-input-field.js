@@ -73,7 +73,7 @@ export class TaglistInputField extends HTMLElement {
 
     addTag(tag) {
         if (this._tags.size >= 9) return;
-        tag = tag.trim().replace(/[<>"'`;&=()\[\]{},\\\/]/g, '');
+        tag = tag.trim().replace(/[<>"'`;&=()[\]{},\\/]/g, '');
         if (tag && !this._tags.has(tag)) {
             this._tags.add(tag);
             this.renderTags();
