@@ -18,7 +18,7 @@
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
 import { BgDiagramDb } from './utils/db-api.js';
-import { fetchLanguage, getDefaultUserLanguage } from './utils/lang.js';
+import { fetchLanguage, getDefaultUserLanguage, t } from './utils/lang.js';
 import { setClass } from './utils/helpers.js';
 
 export const Settings = Object.freeze({
@@ -64,6 +64,8 @@ class App {
         const lang = this.settings[Settings.AppLanguage] || getDefaultUserLanguage();
         await fetchLanguage(lang);
         document.documentElement.lang = lang;
+        document.title = t('app-title');
+        document.querySelector('meta[name="description"]').setAttribute('content', t('app-description'));
 
         // Set the color theme
         const theme = this.settings[Settings.AppTheme] || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
