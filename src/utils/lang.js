@@ -27,6 +27,7 @@ const catalog = {};
 
 function onCatalogLoaded(lang) {
     catalog[lang].pluralRules = new Intl.PluralRules(lang, { type: 'cardinal' });
+    catalog[lang].messages._appName = 'BgDiagramDb';
     catalog[lang].messages._githubHomepageLink = '<a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>';
 }
 

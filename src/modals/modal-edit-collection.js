@@ -20,6 +20,7 @@
 import { t } from '../utils/lang.js';
 import { showModal } from '../utils/helpers.js';
 import { collectFields, populateFields, validateFields } from '../utils/fields.js';
+import { DataField } from '../utils/fields.js';
 
 import '../components/input-field.js';
 import '../components/textarea-field.js';
@@ -39,6 +40,11 @@ class ModalEditCollection extends HTMLElement {
             <div class="modal-body">
                 <input-field name="name" label="${t('name')}"></input-field>
                 <textarea-field name="desc" label="${t('description')}"></textarea-field>
+                <div class="form-check">
+                    <input ${DataField}="sr" class="form-check-input" type="checkbox" id="includeInTraining">
+                    <label class="form-check-label" for="includeInTraining">${t('coll-sr')}</label>
+                </div>
+                <div class="form-text">${t('coll-sr-desc')}</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary">${t('cancel')}</button>
