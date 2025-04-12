@@ -109,6 +109,7 @@ class PageCollections extends BaseComponent {
             // Import collection
             const fileInput = this.$('#importCollection');
             const file = fileInput.files[0];
+            fileInput.value = ''; // Reset the input field
             if (!file) return;
 
             try {
@@ -129,8 +130,6 @@ class PageCollections extends BaseComponent {
                 const msg = t(e.message);
                 this.$('modal-error').open(msg != e.message ? msg : t('error-import-collection-generic', { error: msg }));
             }
-
-            fileInput.value = ''; // Reset the input field
         });
 
         this.on('[data-action="create"]', 'click', async () => {
