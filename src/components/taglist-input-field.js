@@ -52,7 +52,6 @@ export class TaglistInputField extends HTMLElement {
     }
 
     set value(tags) {
-        console.log(222, tags);
         this._tags = new Set(typeof tags == 'string' ? tags.split(',') : tags);
         this.renderTags();
     }

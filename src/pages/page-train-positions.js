@@ -129,7 +129,6 @@ button > small {
         this._deck = this._deck.slice(0, this.getMaxNewCards(this._deck.length));
 
         // Append due cards from the selected collection, capping it at the maximum number of cards per session
-        const duecards = await app.db.findDueCards(this._idCollection, this.now(), true);
         await this.appendDueCardsToDeck(this.now());
         this._deck = this._deck.slice(0, this.getMaxTotalCards(this._deck.length));
 
