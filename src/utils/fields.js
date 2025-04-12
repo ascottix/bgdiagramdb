@@ -76,11 +76,21 @@ export function populateFields(element, data = {}) {
  * @returns {Object} - An object containing the collected data.
  */
 export function collectFields(element) {
+    const sanitize = (s) => typeof s == 'string' ? sanitizeHtml(s.trim()) : s;
+
     const data = {};
     const fields = element.querySelectorAll(`[${DataField}]`);
     fields.forEach(field => {
         const key = field.getAttribute(DataField);
-        data[key] = field.type == 'checkbox' ? field.checked : sanitizeHtml(field.value?.trim());
+        let val = field.type == 'checkbox' ? field.checked : field.value;
+
+        if (Array.isArray(val)) {
+            val = val.map(sanitize);
+        } else {
+            val = sanitize(val);
+        }
+
+        data[key] = val;
     });
 
     return data;
