@@ -85,16 +85,14 @@ export async function importCollection(db, data) {
     const coll = sanitizeCollection({ name: data.name, desc: data.desc, sr: data.sr });
     const id_coll = await db.createCollection(coll);
 
-    const promises = [];
-
-    data.positions.forEach(pos => {
+    for(const pos of data.positions) {
         pos.id_coll = id_coll;
         pos.sr = coll.sr ? { state: State.New } : undefined; // Ensure spaced repetition flag is set correctly
         sanitizePosition(pos);
-        promises.push(db.addPosition(pos));
-    });
+        await db.addPosition(pos); // Make sure positions are added in the original order (don't async)
+    }
 
-    return Promise.all(promises).then(() => id_coll);
+    return id_coll;
 }
 
 /**
