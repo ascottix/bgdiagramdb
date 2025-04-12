@@ -33,7 +33,9 @@ class PageTrainPositions extends BaseComponent {
     constructor() {
         super();
 
-        this._fsrs45 = fsrs45();
+        this._fsrs45 = fsrs45({
+            requestRetention: app.settings[Settings.TrainPosDefaultRetention]
+        });
 
         this.innerHTML = `
 <style>
@@ -81,39 +83,61 @@ button > small {
         `;
     }
 
+    // Returns the current time in milliseconds (useful to mock the current time for testing)
+    now() {
+        return Date.now();
+    }
+
+    getMaxNewCards(n) {
+        return Math.min(n, app.settings[Settings.TrainPosMaxNewCardsPerSession]);
+    }
+
+    getMaxTotalCards(n) {
+        return Math.min(n, app.settings[Settings.TrainPosMaxCardsPerSession]);
+    }
+
     async onCollectionChange() {
+        // Update the URL with the selected collection
         setQueryParams({ collection: this._collections.value });
+
+        // Get and display the number of new and due cards in the selected collection
         const idCollection = parseInt(this._collections.value);
 
         const newcards = await app.db.findCardsInState(idCollection, State.New, true);
-        const duecards = await app.db.findDueCards(idCollection, null, true);
+        const duecards = await app.db.findDueCards(idCollection, this.now(), true);
 
-        translateComponent(this, { newcards, duecards });
+        translateComponent(this, {
+            newcards: this.getMaxNewCards(newcards),
+            duecards: this.getMaxTotalCards(duecards)
+        });
         this.$('[data-action="start"]').disabled = (newcards + duecards) == 0;
     }
 
     async appendDueCardsToDeck(now) {
         const dueCardsList = await app.db.findDueCards(this._idCollection, now);
-        console.log(dueCardsList);
 
         this._deck.push(...dueCardsList);
     }
 
     async createNewDeck() {
-        this._idCollection = parseInt(this._collections.value);
+        // Remember the selected collection, because later on we'll try to append more due cards from it
+        this._idCollection = parseInt(this._collections.value); // 0 = all
+
+        // Initialize the deck with new cards, capping it at the maximum number of new cards per session
         this._deck = await app.db.findCardsInState(this._idCollection, State.New);
         this._deckIndex = 0;
-        this._sessionStartTime = Date.now();
-        this._deck = this._deck.slice(0, Math.min(this._deck.length, app.settings[Settings.TrainPosMaxNewCardsPerSession]));
-        const duecards = await app.db.findDueCards(this._idCollection, null, true);
-        console.log('duecards', duecards);
-        await this.appendDueCardsToDeck();
-        this._deck = this._deck.slice(0, Math.min(this._deck.length, app.settings[Settings.TrainPosMaxCardsPerSession]));
-        console.log('Deck created, len=', this._deck.length);
-        // TODO: work with only the first card for now
-        this._deck = this._deck.slice(0, 1);
-        console.log('Deck created, len=', this._deck);
+        this._deck = this._deck.slice(0, this.getMaxNewCards(this._deck.length));
+
+        // Append due cards from the selected collection, capping it at the maximum number of cards per session
+        const duecards = await app.db.findDueCards(this._idCollection, this.now(), true);
+        await this.appendDueCardsToDeck(this.now());
+        this._deck = this._deck.slice(0, this.getMaxTotalCards(this._deck.length));
+
+        // Shuffle the deck
         shuffleArray(this._deck);
+
+        // Remember the start time of the session, so we can show the session duration at the end
+        this._sessionStartTime = Date.now();
     }
 
     showCurrentQuestion() {
@@ -135,10 +159,13 @@ button > small {
     }
 
     showCurrentAnswer() {
-        this._currentCardAnswerTime = Date.now();
+        this._currentCardAnswerTime = this.now();
+
         const intervals = this._fsrs45.previewIntervalBeforeNextReview(this._deck[this._deckIndex].sr, this._currentCardAnswerTime).map(i => humanizeTimeInterval(i / 1000))
         populateFields(this, { int_again: intervals[0], int_hard: intervals[1], int_good: intervals[2], int_easy: intervals[3] });
+
         this.$('#card-' + this._deckIndex).flip();
+
         setTimeout(() => { // Allow the card animation to complete
             this.hide('[data-action="show-answer"]');
             this.$$('[data-mode="card-back"]').forEach(e => this.show(e));
@@ -147,29 +174,26 @@ button > small {
     }
 
     async rateCurrentCard(rating) {
+        // Do not modify the deck, it would alter the final stats
         const pos = structuredClone(this._deck[this._deckIndex]);
 
         pos.sr = this._fsrs45.updateCardAfterReview(pos.sr, this._currentCardAnswerTime, rating);
 
-        console.log('Rating', rating, 'for', pos.sr);
-
-        // TODO!!! scaffold, remove
-        // await app.db.updatePosition(pos);
-
-        console.log('Position updated', new Date(pos.sr.due));
+        await app.db.updatePosition(pos);
 
         this.advanceToNextCard();
     }
 
     async advanceToNextCard() {
         this._deckIndex++;
+
         if (this._deckIndex >= this._deck.length) {
-            console.log('Deck finished, appending due cards, idx=', this._deckIndex, 'len=', this._deck.length);
-            // TODO: work with only the first card for now
-            if (this._deck.length < app.settings[Settings.TrainPosMaxCardsPerSession]) {
-                // await this.appendDueCardsToDeck(Date.now() + 60 * 1000); // Include one minute in the future
+            // The deck is finished, but in the meanwhile there may be more due cards to review
+            if (this._deck.length < this.getMaxTotalCards(+Infinity)) {
+                await this.appendDueCardsToDeck(this.now() + 60 * 1000); // Include one minute in the future
             }
-            console.log('Deck replenished, len=', this._deck.length);
+
+            // If there are no new cards to show, we're done
             if (this._deckIndex >= this._deck.length) {
                 this.showSessionSummary();
                 return;
@@ -185,8 +209,9 @@ button > small {
         const reviewCards = totalCards - newCards;
         const sessionDuration = Date.now() - this._sessionStartTime;
         const sessionDurationMin = Math.max(1, Math.round(sessionDuration / 1000 / 60));
+
         translateComponent(this, { totalCards, newCards, reviewCards, sessionDurationMin });
-        console.log('Session stats:', newCards, reviewCards, sessionDurationMin);
+
         this.hide('#tp-card');
         this.show('#tp-summary');
     }
