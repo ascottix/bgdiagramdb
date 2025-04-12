@@ -142,7 +142,6 @@ class ModalEditPosition extends HTMLElement {
                     if (!data.title) errors.push({ title: '' });
                     if (!data.xgid) errors.push({ xgid: '' });
                     if (data.xgid && !BgBoard.isValidXgid(data.xgid)) errors.push({ xgid: t('invalid-xgid') });
-                    console.log(data, errors);
                 });
             }
 
