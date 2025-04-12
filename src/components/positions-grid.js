@@ -17,6 +17,8 @@
     You should have received a copy of the GNU General Public License along with
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
+import { app } from '../app.js';
+
 import './position-card.js';
 
 export class PositionsGrid extends HTMLElement {
@@ -28,14 +30,23 @@ export class PositionsGrid extends HTMLElement {
     `;
     }
 
-    async show(page) {
+    async show(page, collectionsCache) {
         const html = [];
 
         page.data.forEach(({ id, xgid, title }) => {
-            html.push(`<position-card data-posid="${id}" pos='${JSON.stringify({ xgid, title })}'></position-card>`);
+            html.push(`<position-card data-posid="${id}"></position-card>`);
         });
 
         this.querySelector('.row').innerHTML = html.join('\n');
+
+        for (const pos of page.data) {
+            const card = this.querySelector(`[data-posid="${pos.id}"]`);
+            card.pos = pos;
+            if (!collectionsCache[pos.id_coll]) {
+                collectionsCache[pos.id_coll] = await app.db.getCollection(pos.id_coll);
+            }
+            card.collection = collectionsCache[pos.id_coll];
+        }
     }
 }
 

@@ -55,7 +55,7 @@ export class PositionPane extends BaseComponent {
         });
 
         // Look for XGID image placeholders
-        const XgidPlaceholder = /\[(XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+(:.+?)?)]/;
+        const XgidPlaceholder = /\[(XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+(:.+?)?)]/g;
 
         html = html.replace(XgidPlaceholder, (_, xgid) => {
             const svg = xgidToSvg(xgid, {

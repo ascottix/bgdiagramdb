@@ -140,8 +140,9 @@ class ModalEditPosition extends HTMLElement {
                 return validateFields(this, (data, errors) => {
                     if (!Number(data.id_coll)) errors.push({ id_coll: '' });
                     if (!data.title) errors.push({ title: '' });
-                    if (!data.xgid) errors.push({ title: '' });
-                    if (!BgBoard.isValidXgid(data.xgid)) errors.push({ xgid: t('invalid-xgid') });
+                    if (!data.xgid) errors.push({ xgid: '' });
+                    if (data.xgid && !BgBoard.isValidXgid(data.xgid)) errors.push({ xgid: t('invalid-xgid') });
+                    console.log(data, errors);
                 });
             }
 

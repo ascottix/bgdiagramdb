@@ -35,6 +35,8 @@ class PagePositions extends BaseComponent {
     constructor() {
         super();
 
+        this._collectionsCache = {};
+
         this.innerHTML = `
 <div data-type="grid">
     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -95,7 +97,7 @@ class PagePositions extends BaseComponent {
         setClass(this.$('[data-if-empty="show"]'), 'd-none', page.data.length != 0);
         setClass(this.$('[data-if-empty="hide"]'), 'd-none', page.data.length == 0);
 
-        this.$('positions-grid').show(page);
+        this.$('positions-grid').show(page, this._collectionsCache);
 
         setClass(this.$('[data-action="prev-page"]'), 'disabled', page.page == 0);
         setClass(this.$('[data-action="next-page"]'), 'disabled', page.last);

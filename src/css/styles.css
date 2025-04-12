@@ -53,6 +53,10 @@ body {
     margin-left: 5%;
 }
 
+.bgdiagram__text--annotation {
+    font-size: 4em !important;
+}
+
 /* Card */
 .flip-card__container {
     perspective: 1000px;

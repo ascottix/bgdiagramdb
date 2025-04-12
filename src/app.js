@@ -24,6 +24,7 @@ import { setClass } from './utils/helpers.js';
 export const Settings = Object.freeze({
     AppLanguage: 'appLanguage',
     AppTheme: 'appTheme',
+    AppAutoTitleDiagrams: 'appAutoTitleDiagrams',
     BgdTheme: 'bgdTheme',
     BgdHomeBoardAtLeft: 'bgdHomeBoardAtLeft',
     BgdHidePipcount: 'bgdHidePipcount',
