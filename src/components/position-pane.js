@@ -54,6 +54,18 @@ export class PositionPane extends BaseComponent {
 </span>`;
         });
 
+        // Look for XGID image placeholders
+        const XgidPlaceholder = /\[(XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+(:.+?)?)]/;
+
+        html = html.replace(XgidPlaceholder, (_, xgid) => {
+            const svg = xgidToSvg(xgid, {
+                ...this._diagramOptions,
+                classNames: ['bgd-embedded-diagram', 'border', 'bgdiagram']
+            });
+
+            return svg;
+        });
+
         return html;
     }
 
@@ -142,9 +154,9 @@ button.btn-sm-inline {
       <div class="fs-3 mb-2">${pos.title || ''}</div> ${this._isCard ? '' : '<tag-pills class="ms-3 mb-2" tags="' + pos.tags.join(',') + '"></tag-pills>'}
     </div>
     <div class="col-12 col-md-6 mb-3">
-      <div class="card border rounded overflow-hidden">${svg}</div>
+      <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
       <div class="${this._isCard ? 'd-none' : 'd-flex align-items-center justify-content-center mt-2'}">
-        <span id="copyText" style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">${pos.xgid}</span>
+        <span style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">${pos.xgid}</span>
         <button data-action="copy-xgid" class="btn btn-outline-secondary btn-sm-inline ms-2" aria-label="Copia negli appunti" title="Copia negli appunti"><i class="bi bi-clipboard"></i></button>
       </div>
     </div>
@@ -164,12 +176,13 @@ button.btn-sm-inline {
             this.$$('span').forEach((span) => {
                 span.classList.remove(...Highlight);
             });
-            this.classList.remove('bgd-move-preview');
 
             // Handle preview buttons
             const target = event.target.closest('button');
             const container = event.target.closest('[data-xgid]');
             let xgid = container?.getAttribute('data-xgid');
+
+            this.$('#mainDiagram').classList.remove('bgd-move-preview');
 
             if (target) {
                 const move = target.getAttribute('data-move');
@@ -192,7 +205,7 @@ button.btn-sm-inline {
                         const board = new BgBoard();
                         board.set(xgid);
                         board.playMove(BgBoard.parseMove(move));
-                        this.classList.add('bgd-move-preview');
+                        this.$('#mainDiagram').classList.add('bgd-move-preview');
                         xgid = board.get();
                     }
                 }
