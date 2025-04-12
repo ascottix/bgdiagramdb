@@ -19,7 +19,7 @@
 */
 import { t } from './lang.js';
 import { Settings, app } from '../app.js';
-import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@v1.0.2/dist/bgdiagram.min.js';
+import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@v1.0.3/dist/bgdiagram.min.js';
 
 const ClickEvent = 'click';
 const HiddenModalEvent = 'hidden.bs.modal';
