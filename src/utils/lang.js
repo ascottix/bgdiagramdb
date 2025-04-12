@@ -77,6 +77,16 @@ export function t(key, params) {
     const data = catalog[lang] || catalog['en'];
     let message = data.messages[key] || key;
 
+    // Replace references to other keys
+    message = message.replace(/\{#(.*?)\}/g, (_, refKey) => {
+        if (data.messages[refKey]) {
+            return t(refKey, params);
+        } else {
+            return `{#${refKey}}`;
+        }
+    });
+
+    // Resolve parameters
     if (params) {
         message = message.replace(/\{(.*?)\}/g, (_, key) => {
             const [keyValue, keyParam] = key.split(':');
@@ -98,16 +108,6 @@ export function t(key, params) {
             return value;
         });
     }
-
-    // Replace references to other keys
-    message = message.replace(/\{#(.*?)\}/g, (_, refKey) => {
-        if (data.messages[refKey]) {
-            return t(refKey, params);
-        } else {
-            return `{#${refKey}}`;
-        }
-    });
-
 
     return message;
 }
