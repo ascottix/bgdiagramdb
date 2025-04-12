@@ -48,6 +48,11 @@ body {
     stroke-opacity: .4;
 }
 
+.bgd-embedded-diagram {
+    width: 90%;
+    margin-left: 5%;
+}
+
 /* Card */
 .flip-card__container {
     perspective: 1000px;
