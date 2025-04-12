@@ -301,3 +301,26 @@ export function humanizeTimeInterval(seconds) {
         return t('{years}', { years: years + halfYears });
     }
 }
+
+export function wrapTextOnSpaces(text, wordWrapSize) {
+    const words = text.split(/\s+/); // Split by any whitespace
+    const lines = [];
+    let currentLine = '';
+
+    for (const word of words) {
+        if (currentLine.length == 0) {
+            currentLine = word;
+        } else if (currentLine.length + 1 + word.length <= wordWrapSize) {
+            currentLine += ' ' + word;
+        } else {
+            lines.push(currentLine);
+            currentLine = word;
+        }
+    }
+
+    if (currentLine.length > 0) {
+        lines.push(currentLine);
+    }
+
+    return lines;
+}
