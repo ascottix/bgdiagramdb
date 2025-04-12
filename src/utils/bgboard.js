@@ -183,9 +183,9 @@ export class BgBoard {
         return 'XGID=' + xgid.join(':');
     }
 
-    // Check if a string looks like a valid XGID
+    // Check if a string looks like a valid XGID (allows extra trailing characters)
     static isValidXgid(xgid) {
-        return /^XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+$/.test(xgid);
+        return /^XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+/.test(xgid);
     }
 
     // Check if a string looks like a valid GNU Backgammon ID
