@@ -33,7 +33,7 @@ export class PositionsGrid extends HTMLElement {
     async show(page, collectionsCache) {
         const html = [];
 
-        page.data.forEach(({ id, xgid, title }) => {
+        page.data.forEach(({ id }) => {
             html.push(`<position-card data-posid="${id}"></position-card>`);
         });
 
