@@ -74,11 +74,11 @@ export class TaglistInputField extends HTMLElement {
     addTag(tag) {
         if (this._tags.size >= 9) return;
         tag = tag.trim().replace(/[<>"'`;&=()[\]{},\\/]/g, '');
-        if (tag && !this._tags.has(tag)) {
+        if (tag && tag.length >= 3 && !this._tags.has(tag)) {
             this._tags.add(tag);
             this.renderTags();
+            this._tagInput.value = '';
         }
-        this._tagInput.value = '';
     }
 
     connectedCallback() {
@@ -87,12 +87,9 @@ export class TaglistInputField extends HTMLElement {
         this._tagInput.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ' || e.key === ',' || e.key === 'Tab') {
                 e.preventDefault();
-                this.addTag(this._tagInput.value);
+                const tags = this._tagInput.value.split(/[,\s]+/); // On mobile we may not get all events
+                tags.forEach(tag => this.addTag(tag));
             }
-        });
-
-        this._tagInput.addEventListener('blur', () => {
-            this.addTag(this._tagInput.value); // Save if user clicks away
         });
 
         this.addEventListener('click', (event) => {
