@@ -20,24 +20,64 @@
 import { sanitizeHtml } from './fields.js';
 import { State } from './fsrs45.js';
 import { Idb } from './indexeddb.js';
+import { BgBoard } from './bgboard.js';
 
+/**
+ * Sanitizes a collection object.
+ *
+ * @param {Object} coll - The collection object to be sanitized.
+ * @returns {Object} - The sanitized collection object.
+ */
 export function sanitizeCollection(coll) {
-    coll.name = sanitizeHtml(coll.name);
-    coll.desc = sanitizeHtml(coll.desc);
-    coll.sr = !!coll.sr;
-
-    return coll;
+    return {
+        name: sanitizeHtml(coll.name),
+        desc: sanitizeHtml(coll.desc),
+        sr: !!coll.sr
+    }
 }
 
+/**
+ * Sanitizes a position object.
+ *
+ * @param {Object} pos - The position object to be sanitized.
+ * @returns {Object} - The sanitized position object.
+ */
 export function sanitizePosition(pos) {
-    pos.title = sanitizeHtml(pos.title);
-    pos.xgid = sanitizeHtml(pos.xgid);
-    if (!Array.isArray(pos.tags)) pos.tags = [];
-    pos.tags = pos.tags.map(t => sanitizeHtml(t));
-    pos.question = sanitizeHtml(pos.question);
-    pos.comment = sanitizeHtml(pos.comment);
+    const result = {
+        id_coll: Number.isInteger(pos.id_coll) ? pos.id_coll : 0,
+        title: sanitizeHtml(pos.title),
+        xgid: BgBoard.isValidXgid(pos.xgid) ? sanitizeHtml(pos.xgid) : 'XGID=-b----E-C---eE---c-e----B-:0:0:1:00:0:0:0:0:6',
+        tags: Array.isArray(pos.tags) ? pos.tags.map(t => sanitizeHtml(t)) : [],
+        question: sanitizeHtml(pos.question),
+        comment: sanitizeHtml(pos.comment)
+    }
 
-    return pos;
+    if (typeof pos.sr == 'object') {
+        const state = pos.sr.state;
+        if (
+            (state == State.New || state == State.Learning || state == State.Relearning || state == State.Review)
+            && Number.isInteger(pos.sr.reps)
+            && Number.isInteger(pos.sr.lapses)
+            && Number.isInteger(pos.sr.lastReview)
+            && Number.isFinite(pos.sr.stability)
+            && Number.isFinite(pos.sr.difficulty)
+            && Number.isInteger(pos.sr.due)
+        ) {
+            result.sr = {
+                state,
+                reps: pos.sr.reps,
+                lapses: pos.sr.lapses,
+                lastReview: pos.sr.lastReview,
+                stability: pos.sr.stability,
+                difficulty: pos.sr.difficulty,
+                due: pos.sr.due
+            }
+        }
+    }
+
+    console.log(result);
+
+    return result;
 }
 
 /**
@@ -81,15 +121,15 @@ export async function importCollection(db, data) {
         throw new Error('error-import-collection-version');
     }
 
-    // TODO: should be in a single transaction
-    const coll = sanitizeCollection({ name: data.name, desc: data.desc, sr: data.sr });
-    const id_coll = await db.createCollection(coll);
+    const tx = db.transaction(null, Idb.Writable);
 
-    for(const pos of data.positions) {
+    const coll = sanitizeCollection(data);
+    const id_coll = await db.createCollection(coll, tx);
+
+    for (const pos of data.positions) {
         pos.id_coll = id_coll;
         pos.sr = coll.sr ? { state: State.New } : undefined; // Ensure spaced repetition flag is set correctly
-        sanitizePosition(pos);
-        await db.addPosition(pos); // Make sure positions are added in the original order (don't async)
+        await db.addPosition(sanitizePosition(pos), tx); // Make sure positions are added in the original order (don't async)
     }
 
     return id_coll;
@@ -102,17 +142,18 @@ export async function importCollection(db, data) {
  * If the collection has the spaced repetition flag enabled and a position does not, the flag is added to the position.
  * Conversely, if the collection does not have the spaced repetition flag and a position does, the flag is removed from the position.
  *
+ * @param {BgDiagramDb} db - The database instance.
  * @param {string} id_coll - The ID of the collection to synchronize.
- * @param {number} [pos] - The specific position to synchronize. If not provided, all positions in the collection will be synchronized.
+ * @param {number} [target_pos] - The specific position to synchronize. If not provided, all positions in the collection will be synchronized.
  * @returns {Promise<void>} A promise that resolves when the synchronization is complete.
  */
-export async function synchSpacedRepetitionFlag(db, id_coll, pos) {
+export async function synchSpacedRepetitionFlag(db, id_coll, target_pos) {
     let coll = await db.getCollection(id_coll);
-    let positions = pos ? [pos] : await db.listPositions(id_coll);
+    let positions = target_pos ? [target_pos] : await db.listPositions(id_coll);
 
     const promises = [];
 
-    for (let pos of positions) {
+    for (const pos of positions) {
         if (coll.sr != !!pos.sr) {
             pos.sr = coll.sr ? { state: State.New } : undefined;
             promises.push(db.updatePosition(pos));
@@ -122,6 +163,12 @@ export async function synchSpacedRepetitionFlag(db, id_coll, pos) {
     return Promise.all(promises);
 }
 
+/**
+ * Exports the database as a JSON object.
+ *
+ * @param {BgDiagramDb} db - The database instance.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the database data.
+ */
 export async function exportDatabase(db) {
     const data = {};
 
@@ -137,6 +184,13 @@ export async function exportDatabase(db) {
     };
 }
 
+/**
+ * Imports a database backup into the database.
+ *
+ * @param {BgDiagramDb} db - The database instance.
+ * @param {Object} backup - The backup data to import.
+ * @returns {Promise<void>} A promise that resolves when the import is complete.
+ */
 export async function importDatabase(db, backup) {
     if (!backup.version || isNaN(backup.version) || backup.version > db.version) {
         throw new Error('error-restore-backup-version');
@@ -148,18 +202,24 @@ export async function importDatabase(db, backup) {
         throw new Error('error-restore-backup-data');
     }
 
+    const collIdIndex = {}
+
     const tx = db.transaction(null, Idb.Writable);
 
     db.collections().clear(tx);
     db.positions().clear(tx);
 
     for (const coll of data.collections) {
-        sanitizeCollection(coll);
-        await db.collections().put(coll, tx);
+        if(!Number.isInteger(coll.id)) continue;
+        const newId = await db.createCollection(sanitizeCollection(coll), tx);
+        collIdIndex[coll.id] = newId; // Remember the new ID of the collection
     }
 
     for (const pos of data.positions) {
-        sanitizePosition(pos);
-        await db.positions().put(pos, tx);
+        if(!Number.isInteger(pos.id)) continue;
+        const collId = collIdIndex[pos.id_coll];
+        if(!collId) continue;
+        pos.id_coll = collId; // Remap the old collection ID to the new one
+        await db.addPosition(sanitizePosition(pos), tx);
     }
 }
