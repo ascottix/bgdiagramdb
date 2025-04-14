@@ -228,11 +228,12 @@ class PagePositions extends BaseComponent {
                         {
                             // Edit position
                             const pos = await app.db.getPosition(Number(detail.posid));
-                            const data = await this.querySelector('modal-edit-position').open(t('edit-position'), t('save'), structuredClone(pos));
+                            let data = await this.querySelector('modal-edit-position').open(t('edit-position'), t('save'), structuredClone(pos));
                             if (data) {
-                                data.id = pos.id;
                                 data.id_coll = Number(data.id_coll);
-                                await app.db.updatePosition(sanitizePosition(data));
+                                data = sanitizePosition(data);
+                                data.id = pos.id; // Must set ID after sanitize
+                                await app.db.updatePosition(data);
                                 synchSpacedRepetitionFlag(app.db, data.id_coll, data);
                                 this.refresh();
                                 showToast(t('toast-position-updated'));
