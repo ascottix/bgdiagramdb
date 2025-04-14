@@ -19,7 +19,7 @@
 */
 import { t } from '../utils/lang.js';
 import { copyToClipboard, showToast, xgidToSvg } from '../utils/helpers.js';
-import { getUniqueId } from '../utils/fields.js';
+import { escapeHtmlAttr, getUniqueId } from '../utils/fields.js';
 import { BgBoard } from '../utils/bgboard.js';
 
 import { BaseComponent } from './base-component.js';
@@ -148,7 +148,7 @@ button.btn-sm-inline {
     margin-bottom: 0.15rem;
 }
 </style>
-<div class="container-fluid p-0" data-xgid="${pos.xgid}">
+<div class="container-fluid p-0" data-xgid="${escapeHtmlAttr(pos.xgid)}">
   <div class="row">
     <div class="d-flex align-items-center justify-content-center">
       <div class="fs-3 mb-2">${pos.title || ''}</div> ${this._isCard ? '' : '<tag-pills class="ms-3 mb-2" tags="' + pos.tags.join(',') + '"></tag-pills>'}
@@ -157,7 +157,7 @@ button.btn-sm-inline {
       <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
       <div class="${this._isCard ? 'd-none' : 'd-flex align-items-center justify-content-center mt-2'}">
         <span style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">${pos.xgid}</span>
-        <button data-action="copy-xgid" class="btn btn-outline-secondary btn-sm-inline ms-2" aria-label="Copia negli appunti" title="Copia negli appunti"><i class="bi bi-clipboard"></i></button>
+        <button data-action="copy-xgid" class="btn btn-outline-secondary btn-sm-inline ms-2" aria-label="${t('copy-to-clipboard')}" title="${t('copy-to-clipboard')}"><i class="bi bi-clipboard"></i></button>
       </div>
     </div>
     <div class="col-12 col-md-6">

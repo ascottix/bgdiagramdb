@@ -39,6 +39,7 @@ export const EnCatalog = {
         "confirm-delete-collection": "Are you sure you want to delete collection <b>{name}</b>? It contains {positions}.",
         "confirm-delete-position": "Are you sure you want to delete position <b>{name}</b>? It will also be removed from the <b>{coll}</b> collection.",
         "continue": "Continue",
+        "copy-to-clipboard": "Copy to clipboard",
         "create": "Create",
         "create-new-collection": "Create",
         "db-empty": "Your database is empty.",

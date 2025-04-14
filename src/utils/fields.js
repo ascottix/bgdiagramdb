@@ -45,6 +45,14 @@ export function sanitizeHtml(html, textOnly = true) {
     return window.DOMPurify.sanitize(html, options);
 }
 
+export function escapeHtmlAttr(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 /**
  * Populates fields within an element with data.
  *
