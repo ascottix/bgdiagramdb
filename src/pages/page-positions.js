@@ -177,10 +177,14 @@ class PagePositions extends BaseComponent {
             element.querySelector('position-pane').pos = pos;
         };
 
-        const onPositionChange = (index) => translateComponent(carouselContainer, {
-            i: index + 1,
-            n: this._pagerSize.count
-        });
+        const onPositionChange = (index) => {
+            translateComponent(carouselContainer, {
+                i: index + 1,
+                n: this._pagerSize.count
+            });
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        };
 
         carousel.init(index, this._pagerSize.count, setPositionHtml, onPositionChange);
 
