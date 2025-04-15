@@ -27,6 +27,7 @@ import '../components/input-field.js';
 import '../components/select-field.js';
 import '../components/combobox-field.js';
 import '../components/markdown-editor.js';
+import '../components/taglist-input-field.js';
 
 class ModalEditPosition extends HTMLElement {
     constructor() {
