@@ -18,7 +18,7 @@
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
 import { app } from './app.js';
-import { removeQueryFromHash, setActivePage, showPage } from './utils/router.js';
+import { removeQueryFromHash, showPage } from './utils/router.js';
 
 // Register web components
 import './components/app-navbar.js';
