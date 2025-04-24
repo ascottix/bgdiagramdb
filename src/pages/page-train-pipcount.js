@@ -73,12 +73,26 @@ class PageTrainPipcount extends BaseComponent {
         const xgid = getPositionAtIndex(this._games, this._gamesCumulativeCounts, this._currentPosIndex);
         const board = new BgBoard(xgid);
         board.setFromXGID(xgid);
-        const wpc = board.getWhitePipCount();
-        const bpc = board.getBlackPipCount();
+
+        const countPipsWhite = (filter) => {
+            return board.board.map((c, i) => c > 0 && filter(i) ? i * c : 0).reduce((a, c) => a + c, 0);
+        }
+
+        const countPipsBlack = (filter) => {
+            return board.board.map((c, i) => c < 0 && filter(i) ? (25 - i) * c : 0).reduce((a, c) => a - c, 0);
+        }
+
+        const wpc = countPipsWhite(() => true);
+        const bpc = countPipsBlack(() => true);
+        const wpc_home = countPipsWhite(i => i <= 6 || i >= 19);
+        const wpc_out = countPipsWhite(i => i >= 7 && i <= 18);
+        const bpc_home = countPipsBlack(i => i <= 6 || i >= 19);
+        const bpc_out = countPipsBlack(i => i >= 7 && i <= 18);
+
         const pos = {
             xgid,
             question: t('train-pip-question'),
-            comment: t('train-pip-comment', { bpc, wpc, bpdiff: signed(bpc - wpc), wpdiff: signed(wpc - bpc) })
+            comment: t('train-pip-comment', { bpc, wpc, bpdiff: signed(bpc - wpc), wpdiff: signed(wpc - bpc), wpc_home, wpc_out, bpc_home, bpc_out })
         }
         this.$('#' + id).pos = pos;
 
