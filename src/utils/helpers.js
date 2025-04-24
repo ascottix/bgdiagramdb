@@ -324,3 +324,28 @@ export function wrapTextOnSpaces(text, wordWrapSize) {
 
     return lines;
 }
+
+export function openAnalysis(xgid) {
+    const params = [];
+
+    function addParam(name, value) {
+        value && params.push(`${name}=${encodeURIComponent(value)}`);
+    }
+
+    addParam('xgid', xgid);
+    addParam('d', 2);
+    addParam('_ts', Date.now());
+    addParam('lang', app.settings[Settings.AppLanguage]);
+    addParam('appTheme', app.settings[Settings.AppTheme]);
+    addParam('bgdTheme', app.settings[Settings.BgdTheme]);
+
+    const bgdHL = app.settings[Settings.BgdHomeBoardAtLeft];
+    if (bgdHL) {
+        addParam('bgdHL', 1);
+    }
+
+    const currentDir = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+    const url = currentDir + 'analysis.html?' + params.join('&');
+
+    window.open(url, 'bgddb-analysis');
+}

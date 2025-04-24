@@ -18,7 +18,7 @@
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
 import { t } from '../utils/lang.js';
-import { copyToClipboard, showToast, xgidToSvg } from '../utils/helpers.js';
+import { copyToClipboard, openAnalysis, showToast, xgidToSvg } from '../utils/helpers.js';
 import { escapeHtmlAttr, getUniqueId } from '../utils/fields.js';
 import { BgBoard } from '../utils/bgboard.js';
 
@@ -49,9 +49,9 @@ export class PositionPane extends BaseComponent {
         html = html.replace(re, function (match) {
             return `
 <span style="white-space:nowrap;"><span class="move"><i class="bi bi-eye me-1"></i>${match}</span>
-<button class="btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-arrow" title="${t('tooltip-preview-arrow')}"><i class="bi bi-arrow-down-left"></i></button>
-<button class="btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-board" title="${t('tooltip-preview-board')}"><i class="bi bi-eye"></i></button>
-</span>`;
+<button class="ms-2 btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-arrow" title="${t('tooltip-preview-arrow')}"><i class="bi bi-arrow-down-left"></i></button>
+<button class="ms-1 btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-board" title="${t('tooltip-preview-board')}"><i class="bi bi-eye"></i></button>
+</span>`.replace(/\n/g, '');
         });
 
         // Look for XGID image placeholders
@@ -125,7 +125,14 @@ export class PositionPane extends BaseComponent {
         this.querySelector('.flip-card').classList.toggle('flip-card__flipped');
     }
 
+    isLegalPos() {
+        const board = new BgBoard();
+        board.set(this._pos.xgid);
+        return board.isLegal();
+    }
+
     refresh() {
+        const ToolbarBtnClass = 'btn btn-outline-secondary btn-sm-inline ms-2';
         const pos = this._pos;
         const svg = xgidToSvg(pos.xgid, this._diagramOptions);
 
@@ -156,8 +163,9 @@ button.btn-sm-inline {
     <div class="col-12 col-md-6 mb-3">
       <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
       <div class="${this._isCard ? 'd-none' : 'd-flex align-items-center justify-content-center mt-2'}">
-        <span style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">${pos.xgid}</span>
-        <button data-action="copy-xgid" class="btn btn-outline-secondary btn-sm-inline ms-2" aria-label="${t('copy-to-clipboard')}" title="${t('copy-to-clipboard')}"><i class="bi bi-clipboard"></i></button>
+      <a href="analysis.html?xgid=XGID%3D-b----E-C---eE---c-e----B-%3A0%3A0%3A1%3A21%3A0%3A0%3A0%3A0%3A10">XXXX</a>
+        <button data-action="copy-xgid" class="${ToolbarBtnClass}" aria-label="${t('copy-to-clipboard')}" title="${t('copy-to-clipboard')}"><i class="bi bi-clipboard"></i> ${t('copy')}</button>
+        <button data-action="analyze" class="${this.isLegalPos() ? ToolbarBtnClass : 'd-none'}" aria-label="${t('analyze-position-title')}" title="${t('analyze-position-title')}"><i class="bi bi-lightbulb"></i> ${t('analyze-position')}</button>
       </div>
     </div>
     <div class="col-12 col-md-6">
@@ -190,7 +198,9 @@ button.btn-sm-inline {
 
                 if (action == 'copy-xgid') {
                     await copyToClipboard(xgid);
-                    showToast(t('toast-copied-to-clipboard'));
+                    showToast(t('toast-xgid-copied-to-clipboard'));
+                } else if (action == 'analyze') {
+                    openAnalysis(xgid);
                 } else if (action && move) {
                     // Highlight the move text
                     const span = target.closest('span').firstElementChild;

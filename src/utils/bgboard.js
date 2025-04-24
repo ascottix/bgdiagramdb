@@ -193,6 +193,14 @@ export class BgBoard {
         return /^[A-Za-z0-9+/]{14}:[A-Za-z0-9+/]{12}$/.test(id);
     }
 
+    // Check if the board is (more or less) legal
+    isLegal() {
+        const wcc = this.getWhiteCheckersCount();
+        const bcc = this.getBlackCheckersCount();
+
+        return (wcc > 0) && (wcc <= 15) && (bcc > 0) && (bcc <= 15) && BgBoard.isValidXgid(this.get());
+    }
+
     // Clone the board
     clone() {
         return new BgBoard(this.get());
@@ -336,8 +344,8 @@ export class BgBoard {
     getBlackPipCount = () => this.board.map((c, i) => c < 0 ? (25 - i) * c : 0).reduce((a, c) => a - c, 0);
 
     // Get the checker count
-    getWhiteCheckersCount = () => this.board.filter(c => c > 0).length;
-    getBlackCheckersCount = () => this.board.filter(c => c < 0).length;
+    getWhiteCheckersCount = () => this.board.filter(c => c > 0).reduce((a, c) => a + c, 0);
+    getBlackCheckersCount = () => this.board.filter(c => c < 0).reduce((a, c) => a - c, 0);
 
     // Return a text representation of the board
     toDiagram() {
