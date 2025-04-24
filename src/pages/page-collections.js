@@ -159,10 +159,11 @@ class PageCollections extends BaseComponent {
                 }
             } else if (action == 'edit') {
                 // Edit collection
-                const data = await this.$('modal-edit-collection').open(t('edit-collection'), t('save'), collection);
+                let data = await this.$('modal-edit-collection').open(t('edit-collection'), t('save'), collection);
                 if (data) {
+                    data = sanitizeCollection(data);
                     data.id = collId;
-                    await app.db.updateCollection(sanitizeCollection(data));
+                    await app.db.updateCollection(data);
                     synchSpacedRepetitionFlag(app.db, collId);
                     this.refresh();
                     showToast(t('toast-collection-updated', collection));
