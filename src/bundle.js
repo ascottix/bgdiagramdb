@@ -35,11 +35,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     await app.init();
 
     // Add routing listener
-    window.addEventListener('hashchange', () => {
+    const onHashChange = (defaultPage) => {
         const hash = removeQueryFromHash(location.hash);
-        const page = hash.substring(1) || 'home';
+        const page = hash.substring(1) || defaultPage || 'home';
         showPage(page);
-    });
+    };
+
+    window.addEventListener('hashchange', onHashChange);
 
     // Fix aria issue with Bootstrap modals
     window.addEventListener('hide.bs.modal', () => {
@@ -52,7 +54,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('navbar').innerHTML = '<app-navbar></app-navbar>';
 
     // Show the home panel by default
-    const home = 'home';
-    setActivePage(home);
-    showPage(home);
+    onHashChange('home');
 });
