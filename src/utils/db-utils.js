@@ -75,8 +75,6 @@ export function sanitizePosition(pos) {
         }
     }
 
-    console.log(result);
-
     return result;
 }
 
