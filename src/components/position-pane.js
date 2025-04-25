@@ -122,7 +122,8 @@ export class PositionPane extends BaseComponent {
     }
 
     flip() {
-        this.querySelector('.flip-card').classList.toggle('flip-card__flipped');
+        this.$('.flip-card').classList.toggle('flip-card__flipped');
+        this.$('.hide-if-front-card').classList.toggle('d-none');
     }
 
     isLegalPos() {
@@ -162,7 +163,7 @@ button.btn-sm-inline {
     </div>
     <div class="col-12 col-md-6 mb-3">
       <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
-      <div class="${this._isCard ? 'd-none' : 'd-flex align-items-center justify-content-center mt-2'}">
+      <div class="${this._isCard ? 'hide-if-front-card d-none ' : ''}d-flex align-items-center justify-content-center mt-2">
         <button data-action="copy-xgid" class="${ToolbarBtnClass}" aria-label="${t('copy-to-clipboard')}" title="${t('copy-to-clipboard')}"><i class="bi bi-clipboard"></i> ${t('copy')}</button>
         <button data-action="analyze" class="${this.isLegalPos() ? ToolbarBtnClass : 'd-none'}" aria-label="${t('analyze-position-title')}" title="${t('analyze-position-title')}"><i class="bi bi-lightbulb"></i> ${t('analyze-position')}</button>
       </div>
