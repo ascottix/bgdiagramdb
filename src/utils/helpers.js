@@ -19,7 +19,8 @@
 */
 import { t } from './lang.js';
 import { Settings, app } from '../app.js';
-import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@v1.0.3/dist/bgdiagram.min.js';
+import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@v1.0.7/dist/bgdiagram.min.js';
+import { BgBoard } from './bgboard.js';
 
 const ClickEvent = 'click';
 const HiddenModalEvent = 'hidden.bs.modal';
@@ -325,7 +326,13 @@ export function wrapTextOnSpaces(text, wordWrapSize) {
     return lines;
 }
 
+export function stripXgidAnnotations(xgid) {
+    return xgid.split(':').slice(0, 10).join(':');
+}
+
 export function openAnalysis(xgid) {
+    xgid = stripXgidAnnotations(xgid);
+
     const params = [];
 
     function addParam(name, value) {

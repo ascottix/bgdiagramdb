@@ -18,7 +18,7 @@
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
 import { t } from '../utils/lang.js';
-import { copyToClipboard, openAnalysis, showToast, xgidToSvg } from '../utils/helpers.js';
+import { copyToClipboard, openAnalysis, showToast, stripXgidAnnotations, xgidToSvg } from '../utils/helpers.js';
 import { escapeHtmlAttr, getUniqueId } from '../utils/fields.js';
 import { BgBoard } from '../utils/bgboard.js';
 
@@ -163,7 +163,6 @@ button.btn-sm-inline {
     <div class="col-12 col-md-6 mb-3">
       <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
       <div class="${this._isCard ? 'd-none' : 'd-flex align-items-center justify-content-center mt-2'}">
-      <a href="analysis.html?xgid=XGID%3D-b----E-C---eE---c-e----B-%3A0%3A0%3A1%3A21%3A0%3A0%3A0%3A0%3A10">XXXX</a>
         <button data-action="copy-xgid" class="${ToolbarBtnClass}" aria-label="${t('copy-to-clipboard')}" title="${t('copy-to-clipboard')}"><i class="bi bi-clipboard"></i> ${t('copy')}</button>
         <button data-action="analyze" class="${this.isLegalPos() ? ToolbarBtnClass : 'd-none'}" aria-label="${t('analyze-position-title')}" title="${t('analyze-position-title')}"><i class="bi bi-lightbulb"></i> ${t('analyze-position')}</button>
       </div>
@@ -197,7 +196,7 @@ button.btn-sm-inline {
                 const action = target.getAttribute('data-action');
 
                 if (action == 'copy-xgid') {
-                    await copyToClipboard(xgid);
+                    await copyToClipboard(stripXgidAnnotations(xgid));
                     showToast(t('toast-xgid-copied-to-clipboard'));
                 } else if (action == 'analyze') {
                     openAnalysis(xgid);

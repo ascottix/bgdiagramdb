@@ -19,13 +19,12 @@
 */
 import { Settings, app } from '../app.js';
 import { t } from '../utils/lang.js';
-import { wrapTextOnSpaces, xgidToSvg } from '../utils/helpers.js';
+import { setClass, wrapTextOnSpaces, xgidToSvg } from '../utils/helpers.js';
+import { BgBoard } from '../utils/bgboard.js';
 
 export class PositionCard extends HTMLElement {
     constructor() {
         super();
-
-        this._pos = JSON.parse(this.getAttribute('pos'));
 
         this.innerHTML = `
 <style>
@@ -39,9 +38,10 @@ button[data-action="view-pos"] {
         <button data-action="view-pos"></button>
         <div class="card-body">
             <div class="small text-truncate"></div>
-            <div class="fs-5 fw-bold text-truncate"></div>
+            <div class="display-6 fs-4 text-truncate"></div>
         </div>
         <div class="card-footer text-end">
+            <button class="btn btn-outline-success btn-sm" data-action="analyze-pos" title="${t('analyze-position-title')}"><i class="bi bi-lightbulb"></i></button>
             <button class="btn btn-outline-primary btn-sm" data-action="edit-pos" title="${t('tooltip-edit-position')}"><i class="bi bi-pencil-fill"></i></button>
             <button class="btn btn-outline-danger btn-sm" data-action="delete-pos" title="${t('tooltip-delete-position')}"><i class="bi bi-trash-fill"></i></button>
         </div>
@@ -54,6 +54,8 @@ button[data-action="view-pos"] {
         this._pos = pos;
         this.querySelector('.card.h-100 > button').innerHTML = this.diagram();
         this.querySelector('.card-body > div:nth-child(2)').textContent = this._pos.title;
+        const board = new BgBoard(pos.xgid);
+        setClass(this.querySelector('[data-action="analyze-pos"]'), 'd-none', !board.isLegal());
     }
 
     set collection(collection) {

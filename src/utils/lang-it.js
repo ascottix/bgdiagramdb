@@ -23,7 +23,7 @@ export const ItCatalog = {
         "add": "Aggiungi",
         "all": "Tutte",
         "analyze-position": "Analizza",
-        "analyze-position-title": "Analizza la posizione con GNU Backgammon",
+        "analyze-position-title": "Analizza questa posizione con GNU Backgammon",
         "app-title": "{#_appName} – Studia e gestisci posizioni di backgammon",
         "app-description": "Raccogli posizioni e migliora il tuo backgammon con allenamenti mirati e ripassi intelligenti. Tutto nel tuo browser.",
         "back-to-grid": "Torna alla lista delle posizioni",

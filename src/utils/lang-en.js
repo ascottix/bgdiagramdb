@@ -23,7 +23,7 @@ export const EnCatalog = {
         "add": "Add",
         "all": "All",
         "analyze-position": "Analyze",
-        "analyze-position-title": "Analyze position with GNU Backgammon",
+        "analyze-position-title": "Analyze this position with GNU Backgammon",
         "app-title": "{#_appName} – Study and manage backgammon positions",
         "app-description": "Improve your backgammon skills with smart review, pip counting, and position tracking. Fast, private, and entirely in your browser.",
         "back-to-grid": "Back to positions list",
