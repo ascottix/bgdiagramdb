@@ -33,7 +33,7 @@ class PageCollections extends BaseComponent {
 
         this.innerHTML = `
 <div class="d-flex justify-content-between align-items-center">
-    <h1>${t('collections')}</h1>
+    <h1 class="display-5">${t('collections')}</h1>
     <span>
         <input type="file" id="importCollection" accept="application/json" style="display: none;">
         <button class="btn btn-primary me-2" onclick="document.getElementById('importCollection').click()"><i class="bi bi-box-arrow-in-up"></i> ${t('import')}</button>

@@ -32,7 +32,7 @@ class PageTrainPipcount extends BaseComponent {
 
         this.innerHTML = `
 <div id="tp-controls">
-    <h1>${t('train')} → ${t('train-pipcount')}</h1>
+    <h1 class="display-5">${t('train')} → ${t('train-pipcount')}</h1>
     <div>${t('train-pip-caption')} <collapsible-howto></collapsible-howto></div>
     <div class="d-flex justify-content-center mt-3">
         <button data-action="start" class="btn btn-primary"><i class="bi bi-arrow-right"></i> ${t('start')}</button>

@@ -24,7 +24,7 @@ class PageHome extends HTMLElement {
         super();
 
         this.innerHTML = `
-<h1 class="mb-4">${t('home-page-header')}</h1>
+<h1 class="display-5 mb-4">${t('home-page-header')}</h1>
 <h2 class="h3">${t('home-page-subheader')}</h2>
 <p>${t('home-page-text')}</p>
         `;

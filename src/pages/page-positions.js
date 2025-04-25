@@ -20,7 +20,7 @@
 import { app } from '../app.js';
 import { DataTranslate, t, translateComponent } from '../utils/lang.js';
 import { Idb } from '../utils/indexeddb.js';
-import { getDataAttributes, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
+import { getDataAttributes, openAnalysis, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
 import { sanitizePosition, synchSpacedRepetitionFlag } from '../utils/db-utils.js';
 import { getQueryParams, setQueryParams } from '../utils/router.js';
 
@@ -40,7 +40,7 @@ class PagePositions extends BaseComponent {
         this.innerHTML = `
 <div data-type="grid">
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1>${t('positions')}</h1>
+        <h1 class="display-5">${t('positions')}</h1>
         <button data-action="add-new" class="btn btn-primary"><i class="bi bi-plus-lg"></i> ${t('add')}</button>
     </div>
     <positions-filter></positions-filter>
@@ -220,8 +220,14 @@ class PagePositions extends BaseComponent {
                             }
                         }
                         break;
+                    case 'analyze-pos':
+                        {
+                            const pos = await app.db.getPosition(Number(detail.posid));
+                            openAnalysis(pos.xgid);
+                        }
+                        break;
                     case 'view-pos':
-                        this.viewPosition(detail['posid']);
+                        this.viewPosition(detail.posid);
                         break;
                     case 'show-grid':
                         this.updatePage();

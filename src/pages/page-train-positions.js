@@ -49,7 +49,7 @@ button > small {
 }
 </style>
 <div id="tp-controls" class="">
-    <h1>${t('train')}<i class="bi bi-arrow-right-short fs-3"></i>${t('train-positions')}</h1>
+    <h1 class="display-5">${t('train')}<i class="bi bi-arrow-right-short fs-3"></i>${t('train-positions')}</h1>
     <div>${t('train-pos-caption')} <collapsible-howto></collapsible-howto></div>
     <div class="mt-3 d-flex justify-content-center align-items-end gap-2">
         <select-field name="collections" label="${t('collection')}"></select-field>

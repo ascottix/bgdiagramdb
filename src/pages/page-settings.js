@@ -34,7 +34,7 @@ class PageSettings extends HTMLElement {
 
     rebuild() {
         this.innerHTML = `
-  <h1 class="mb-4">${t('settings')}</h1>
+<h1 class="display-5 mb-4">${t('settings')}</h1>
 
 <div class="accordion mb-4" id="settingsAccordion">
   <!-- General settings -->
