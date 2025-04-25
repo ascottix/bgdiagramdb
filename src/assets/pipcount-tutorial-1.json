@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "name": "Pipcounting tutorial part 1",
+  "desc": "Introduction to pip counting tricks and techniques - Part 1",
+  "author": "The BgDiagramDb Team",
+  "sr": false,
+  "positions": [
+    {
+      "title": "Introduction",
+      "xgid": "XGID=--------------------------:0:0:1:00:0:0:0:0:10:T0,4.5-Introduction",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "In backgammon, pip counting is the skill of quickly evaluating how far each player is from bearing off all their checkers. It’s an essential tool for understanding who's ahead in a race and making informed decisions—especially when considering cube actions or committing to a running game.\n\nThis tutorial explores practical techniques for fast and accurate pip counting, focusing on visual patterns and symmetry. Rather than adding each checker individually, experienced players learn to recognize repeating shapes and formations—such as rectangles or triangles—that make the total count easier to estimate or compute.\n\nWe’ll start by introducing the most useful patterns, showing how they appear on the board and how to mentally rearrange checkers when needed to simplify calculations. These visual shortcuts allow for rapid pip assessments even in complex positions.\n\nLet’s begin by looking at the most basic and widely applicable shapes."
+    },
+    {
+      "title": "The bar",
+      "xgid": "XGID=--BBBBB-------------------:0:0:1:00:0:0:0:0:10:P19,10-19,9-23,9-23,10:A4,3-4,2:T0,4.5-The \"bar\"",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "One of the most useful shapes in pip counting is the **bar**, or **rectangle**. It appears frequently on the board, especially in home boards and priming positions.\n\nLet’s start with the simplest version: a **bar with an odd number of checkers in the base**.\n\n### What it looks like  \nA bar is a compact rectangle of checkers stacked on consecutive points.  \n\nIn this case, we’re looking at a formation like:\n\n- 2 checkers on point 6, 5, 4, 3 and 2  \n\nThis forms a 5×2 bar: 5 columns, each with 2 checkers. The total is **10 checkers**.\n\n### How to count it\n\nThe trick is to use the **middle column** (indicated by the arrow) as a reference.  \n\nIn a bar with an odd number of columns, the center column becomes the **anchor** of your mental calculation.\n\nFor example, in this 5×2 bar:\n- The middle column is on point 4.\n- There are 10 checkers in total.\n- Thererefore the sum is 4 × 10 = 40 pips.\n\nThis works for any odd-numbered bar:\n- Use the center point to anchor your count.\n- Multiply by the total checkers to get the pips."
+    },
+    {
+      "title": "The bar: even base",
+      "xgid": "XGID=--BBBB--------------------:0:0:1:00:0:0:0:0:10:A4,3-4,2:A3,3-3,2:T0,4.5-The \"bar\"꞉ even base",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "Now let’s look at bar patterns where the base has an **even number of checkers**.  \n\n### What it looks like\n\nA bar with an even base consists of stacked checkers on consecutive points, arranged symmetrically around a central **gap** (i.e. no single center point). For example:\n\n- 2 checkers on point 5, 4, 3, 2  \n\nThis forms a 4×2 bar: 4 points, 2 checkers each, for a total of **8 checkers**.\n\n### How to count it\n\nThe trick is to use the **two middle columns** (indicated by arrows in the diagram) as your reference, and sum their point values.\n\nThen, multiply this value by **half the number of checkers** in the bar. **Tip**: You don’t actually need to divide anything—just look at one side of the bar (left or right) and count how many checkers it contains.  \n\nFor example, in this 4×2 bar:\n- The middle columns are on points 4 and 3, so\ntheir sum is 4 + 3 = 7.\n- There are 4 checkers in either **half** of the bar (the bar has 4 + 4 = 8 checkers in total).\n- So the total is 7 × 4 = 28 pips."
+    },
+    {
+      "title": "The bar: examples",
+      "xgid": "XGID=---BBBBB-CCC-bbb-aaaaa----:0:0:1:00:0:0:0:0:6:T0,4.5-The \"bar\"꞉ examples",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "Here's a couple more examples.\n\nThe bar may extend into the outer board, but it still follows the same logic: in the position below, it’s worth 5 × 10 = 50 pips.\n\n[XGID=---BBBBB------------------:0:0:1:00:0:0:0:0:6]\n\nAs long as there is symmetry, the bar doesn't have to be a rectangle. In the square below the center point is 10 and there are 3 × 3 = 9 checkers in total, so the bar is worth 9 × 10 = 90 pips.\n\n[XGID=---------CCC--------------:0:0:1:00:0:0:0:0:6]"
+    },
+    {
+      "title": "The power of symmetry",
+      "xgid": "XGID=--------ABCBA------cbabc--:0:0:1:00:0:0:0:0:10:T0,5.2-The power of:T0,3.8-symmetry",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "In a previous lesson, we learned how to quickly count the pips of a **bar**—a compact rectangle of checkers with an odd number of columns and the same number of checkers per column. But the bar is just one example of a much broader and more powerful idea.\n\n### The core idea: symmetry + odd base\n\nAny shape that:\n- is **horizontally symmetrical**\n- has a **central column** (i.e. an odd number of columns)\n- and has **checkers stacked in a symmetrical pattern**\n\ncan be counted using the same shortcut as the bar:\n\n**Multiply the value of the central point by the total number of checkers in the figure.**\n\nYes, even if the figure has gaps!\n\nLet’s look at a few examples.\n\n---\n\n#### Example 1: The classic bar (5×2)\n\n[XGID=--BBBBB-------------------:0:0:1:00:0:0:0:0:10]\n\nWe’ve seen this one already:\n- 2 checkers on points 6, 5, 4, 3, and 2  \n- Total: 10 checkers  \n- Central point: 4 → 4 × 10 = 40 pips\n\n---\n\n#### Example 2: The “house”\n\n[XGID=---CDC--------------------:0:0:1:00:0:0:0:0:10]\n\nAlthough not a bar, this shape is symmetrical and can be counted the same way:\n- Total: 10 checkers  \n- Center column: point 4  \n- 4 × 10 = 40 pips\n\n---\n\n#### Example 3: More symmetry\n\n[XGID=--CAC---------------------:0:0:1:00:0:0:0:0:10]\n\nThis time the shape looks like a “U”, but it’s still symmetrical:\n- Total: 7 checkers  \n- Center column: point 3  \n- 3 × 7 = 21 pips\n\n---\n\n#### Example 4: With a gap!\n\n[XGID=---B-B--------------------:0:0:1:00:0:0:0:0:10]\n\nYes, as long as there is symmetry, it works even with a gap:\n- Total: 4 checkers  \n- Center column: point 4 — even if it's empty!  \n- 4 × 4 = 16 pips\n\n---\n\n### Why it works\n\nIf the figure is balanced left and right around a central column, then each checker on the left has a twin on the right at an equal distance from the center. The center acts like a **pivot**, and every step away from it in a direction, is compensated by an equivalent step in the other direction."
+    },
+    {
+      "title": "Quick test",
+      "xgid": "XGID=------BBDBB------abba-----:0:0:1:00:0:0:0:0:10:Op-:On-",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "How many pips do the two players have?\n\nTry counting using the patterns you’ve learned so far, then click on the “Comment” tab to check your answer.",
+      "comment": "The bottom player has `8 × 12 = 96` pips, while the top player has `(7 + 6) × 3 = 39` pips (there are 6 checkers in total, but you only need to multiply by half of them).\n\n[XGID=------BBDBB------abba-----:0:0:1:00:0:0:0:0:10]"
+    },
+    {
+      "title": "Next steps",
+      "xgid": "XGID=--------------------------:0:0:1:00:0:0:0:0:10:T0,4.5-Next steps",
+      "tags": ["tutorial", "pipcounting"],
+      "question": "",
+      "comment": "We hope you enjoyed this short tutorial — if so, stay tuned: Part 2 is coming soon!\n\nIn the meantime, you can practice what you’ve learned in the [Train Pipcount playground](#train-pipcount).\n\nPlease note: pipcounting the full board can be ***very challenging***. Don’t worry about getting the full count just yet. The trainer also gives you partial counts for the home and outer boards, so you can focus on the parts you can manage and build your pipcounting skills step by step.\n\nHappy counting!"
+    }
+  ]
+}
