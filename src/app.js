@@ -55,8 +55,9 @@ class App {
 
         // If first time updating the database, load demo collections
         if(databaseUpdated) {
-            await this.importDemoCollection('demo-assorted-problems');
-            await this.importDemoCollection('demo-pipcount-tutorial-1');
+            this.db.setSetting(Settings._LastBackupTime, Date.now());
+            this.importDemoCollection('demo-assorted-problems');
+            this.importDemoCollection('demo-pipcount-tutorial-1');
         }
     }
 
@@ -93,7 +94,7 @@ class App {
         try {
             const data = await fetch('./assets/' + name + '.json');
             const json = await data.json();
-            await importCollection(this.db, json);
+            return importCollection(this.db, json);
         } catch (e) {
             console.error(e);
         }
