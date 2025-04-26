@@ -16,6 +16,10 @@
         .bgdiagram__background {
             fill: white !important;
         }
+
+        tr > td:not(:last-child) {
+            padding-right: 2em;
+        }
     </style>
 </head>
 
@@ -92,7 +96,7 @@
             actions.forEach((action, index) => {
                 markdown.push(`| ${action} | ${equity(data.equity[index])} |`);
             });
-            markdown.push();
+            markdown.push('\n');
             markdown.push('Best cube action: ' + actions[best].toLocaleLowerCase() +
                 (best == 0 ? (data.equity[1] < data.equity[2] ? ', take' : ', pass') : ''));
         }
@@ -102,7 +106,8 @@
 
             markdown.push('# ' + moves[0].move);
             markdown.push('---');
-            markdown.push('<table class="bgdb__analysis--movelist">');
+            markdown.push('| Move | Equity |');
+            markdown.push('| --- | --- |');
             moves.slice(0, 10).forEach((move, index) => {
                 const p = (i) => {
                     const e = i == 5 ? 1 - move.eval[0] : move.eval[i];
@@ -112,16 +117,13 @@
                 const equity = move.equity[0] - (index == 0 ? 0 : moves[0].equity[0]);
                 const color = equity <= -0.08 ? ' text-danger' : equity <= -0.02 ? ' text-success' : '';
 
-                markdown.push('<tr>');
-                markdown.push(`<td><span class="fs-3 pe-3">${move.move}</span></td>`);
-                markdown.push(`<td><span class="fs-3${color}">${equity.toFixed(3)}</span></td>`);
-                markdown.push('</tr>');
-                markdown.push('<tr>');
-                markdown.push(`<td><span class="smalltext pe-2">P: ${p(0)} ${p(1)} ${p(2)} &nbsp; O: ${p(5)} ${p(3)} ${p(4)}</span></td>`);
-                markdown.push('<td></td>');
-                markdown.push('</tr>');
+                const header = (t) => {
+                    return `<span class="fs-4${color}">${t}</span>`;
+                }
+
+                markdown.push(`| ${header(move.move)} | ${header(equity.toFixed(3))} |`);
+                markdown.push(`| P: ${p(0)} ${p(1)} ${p(2)} | O: ${p(5)} ${p(3)} ${p(4)} |`);
             });
-            markdown.push('</table>');
         }
 
         function updateAnalysis() {

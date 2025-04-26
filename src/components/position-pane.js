@@ -112,10 +112,10 @@ export class PositionPane extends BaseComponent {
                 </ul>
                 <!-- Tab panels -->
                 <div class="tab-content border border-top-0 rounded-bottom p-3">
-                    <div class="tab-pane fade show active" id="${tab1}" role="tabpanel" aria-labelledby="${tab1}-tab">
+                    <div class="tab-pane fade show active markdown" id="${tab1}" role="tabpanel" aria-labelledby="${tab1}-tab">
                         ${this.resolveMarkdown(pos.question)}
                     </div>
-                    <div class="tab-pane fade" id="${tab2}" role="tabpanel" aria-labelledby="${tab2}-tab">
+                    <div class="tab-pane fade markdown" id="${tab2}" role="tabpanel" aria-labelledby="${tab2}-tab">
                         ${this.resolveMarkdown(pos.comment)}
                     </div>
                 </div>

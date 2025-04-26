@@ -39,8 +39,8 @@ export function getUniqueId(prefix = 'id') {
  * @param {string} html - The HTML string to be sanitized.
  * @returns {string} - The sanitized text content.
  */
-export function sanitizeHtml(html, textOnly = true) {
-    const options = textOnly ? { ALLOWED_TAGS: [] } : {};
+export function sanitizeHtml(html, keepTextOnly = true) {
+    const options = keepTextOnly ? { ALLOWED_TAGS: [] } : {};
 
     return window.DOMPurify.sanitize(html, options);
 }
@@ -84,7 +84,7 @@ export function populateFields(element, data = {}) {
  * @returns {Object} - An object containing the collected data.
  */
 export function collectFields(element) {
-    const sanitize = (s) => typeof s == 'string' ? sanitizeHtml(s.trim()) : s;
+    const sanitize = (s) => typeof s == 'string' ? sanitizeHtml(s.trim(), false) : s;
 
     const data = {};
     const fields = element.querySelectorAll(`[${DataField}]`);

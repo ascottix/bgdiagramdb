@@ -48,8 +48,8 @@ export function sanitizePosition(pos) {
         title: sanitizeHtml(pos.title),
         xgid: BgBoard.isValidXgid(pos.xgid) ? sanitizeHtml(pos.xgid) : 'XGID=-b----E-C---eE---c-e----B-:0:0:1:00:0:0:0:0:6',
         tags: Array.isArray(pos.tags) ? pos.tags.map(t => sanitizeHtml(t)) : [],
-        question: sanitizeHtml(pos.question),
-        comment: sanitizeHtml(pos.comment)
+        question: sanitizeHtml(pos.question, false),
+        comment: sanitizeHtml(pos.comment, false)
     }
 
     if (typeof pos.sr == 'object') {
@@ -107,33 +107,6 @@ export async function exportCollection(db, id) {
 }
 
 /**
- * Imports a collection into the database.
- *
- * @param {Object} db - The database instance.
- * @param {Object} data - The collection data to import.
- * @returns {Promise<number>} - A promise that resolves to the ID of the created collection.
- * @throws {Error} - Throws an error if the data version is greater than the database version.
- */
-export async function importCollection(db, data) {
-    if (data.version > db.version) {
-        throw new Error('error-import-collection-version');
-    }
-
-    const tx = db.transaction(null, Idb.Writable);
-
-    const coll = sanitizeCollection(data);
-    const id_coll = await db.createCollection(coll, tx);
-
-    for (const pos of data.positions) {
-        pos.id_coll = id_coll;
-        pos.sr = coll.sr ? { state: State.New } : undefined; // Ensure spaced repetition flag is set correctly
-        await db.addPosition(sanitizePosition(pos), tx); // Make sure positions are added in the original order (don't async)
-    }
-
-    return id_coll;
-}
-
-/**
  * Synchronizes the spaced repetition flag for positions in a collection.
  *
  * This function updates the spaced repetition (sr) flag for positions within a collection.
@@ -159,6 +132,35 @@ export async function synchSpacedRepetitionFlag(db, id_coll, target_pos) {
     }
 
     return Promise.all(promises);
+}
+
+/**
+ * Imports a collection into the database.
+ *
+ * @param {Object} db - The database instance.
+ * @param {Object} data - The collection data to import.
+ * @returns {Promise<number>} - A promise that resolves to the ID of the created collection.
+ * @throws {Error} - Throws an error if the data version is greater than the database version.
+ */
+export async function importCollection(db, data) {
+    if (data.version > db.version) {
+        throw new Error('error-import-collection-version');
+    }
+
+    const tx = db.transaction(null, Idb.Writable);
+
+    const coll = sanitizeCollection(data);
+    const id_coll = await db.createCollection(coll, tx);
+
+    for (const pos of data.positions) {
+        pos.id_coll = id_coll;
+        pos.sr = coll.sr ? { state: State.New } : undefined; // Ensure spaced repetition flag is set correctly
+        await db.addPosition(sanitizePosition(pos), tx); // Make sure positions are added in the original order (don't async)
+    }
+
+    await synchSpacedRepetitionFlag(db, id_coll);
+
+    return id_coll;
 }
 
 /**
@@ -219,5 +221,10 @@ export async function importDatabase(db, backup) {
         if(!collId) continue;
         pos.id_coll = collId; // Remap the old collection ID to the new one
         await db.addPosition(sanitizePosition(pos), tx);
+    }
+
+    for (const coll of data.collections) {
+        if(!Number.isInteger(coll.id)) continue;
+        await synchSpacedRepetitionFlag(db, coll.id);
     }
 }
