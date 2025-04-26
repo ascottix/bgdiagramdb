@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     await app.init();
 
     // Add routing listener
-    const onHashChange = (defaultPage) => {
+    const onHashChange = () => {
         const hash = removeQueryFromHash(location.hash);
-        const page = hash.substring(1) || defaultPage || 'home';
+        const page = hash.substring(1) || 'home';
         showPage(page);
     };
 
@@ -54,5 +54,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('navbar').innerHTML = '<app-navbar></app-navbar>';
 
     // Show the home panel by default
-    onHashChange('home');
+    onHashChange();
 });
