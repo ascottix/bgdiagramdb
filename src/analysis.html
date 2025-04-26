@@ -76,6 +76,11 @@
         const outputPanel = document.getElementById('output-panel');
         const copyBtn = document.getElementById('copyBtn');
 
+        function signed(num) {
+            const str = num.toFixed(3);
+            return num > 0 ? '+' + str : str;
+        }
+
         function capitalize(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
@@ -88,8 +93,7 @@
 
             const equity = (eq) => {
                 const delta = eq - optimal;
-                eq = '**' + eq.toFixed(3) + '**';
-                return delta == 0 ? eq : delta < 0 ? `${eq} (${delta.toFixed(3)})` : `${eq} (+${delta.toFixed(3)})`;
+                return `**${signed(eq)}** (${signed(delta)})`;
             }
 
             markdown.push('# ' + capitalize(res.action));
@@ -100,7 +104,7 @@
                 markdown.push(`| ${action} | ${equity(data.equity[index])} |`);
             });
             markdown.push('\n');
-            markdown.push('Best cube action: ' + actions[best].toLocaleLowerCase() +
+            markdown.push('Best choice: ' + actions[best].toLocaleLowerCase() +
                 (best == 0 ? (data.equity[1] < data.equity[2] ? ', take' : ', pass') : ''));
         }
 
