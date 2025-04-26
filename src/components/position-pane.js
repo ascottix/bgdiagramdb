@@ -90,7 +90,7 @@ export class PositionPane extends BaseComponent {
         const pos = this._pos;
 
         if (!pos.question) {
-            return this.resolveMarkdown(pos.comment);
+            return '<div class="markdown">' + this.resolveMarkdown(pos.comment) + '</div>';
         } else {
             const tab1 = getUniqueId();
             const tab2 = getUniqueId();
