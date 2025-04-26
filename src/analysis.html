@@ -17,7 +17,7 @@
             fill: white !important;
         }
 
-        tr > td:not(:last-child) {
+        tr>td:not(:last-child) {
             padding-right: 2em;
         }
     </style>
@@ -25,7 +25,10 @@
 
 <body>
     <div class="container py-4">
-        <h1 class="display-6">BgDiagramDb Analysis</h1>
+        <div class="d-flex justify-content-between">
+            <h1 class="display-6">BgDiagramDb Analysis</h1>
+            <div><div class="small">Powered by</div><div class="fw-bold"><a href="https://github.com/ascottix/gnubg-core" target="_blank">GNU Backgammon</a></div></div>
+        </div>
         <div class="mb-3 row g-2">
             <div class="col-md-9">
                 <label for="xgidInput" class="form-label">XGID</label>
@@ -188,7 +191,7 @@
             document.getElementById('board-container').classList.add('bgdiagram__theme--' + bgdTheme);
         }
 
-        if(params.get('bgdHL')) {
+        if (params.get('bgdHL')) {
             diagramOptions.homeOnLeft = true;
         }
 
