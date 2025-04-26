@@ -42,6 +42,20 @@ export class PositionPane extends BaseComponent {
     resolveMarkdown(markdown) {
         let html = window.marked.marked(markdown || '');
 
+        // Look for XGID image placeholders
+        // Note: image placeholders may contain moves as annotations, so they must be resolved
+        // before creating the preview buttons for the actual moves in the description
+        const XgidPlaceholder = /\[(XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+(:.+?)?)]/g;
+
+        html = html.replace(XgidPlaceholder, (_, xgid) => {
+            const svg = xgidToSvg(xgid, {
+                ...this._diagramOptions,
+                classNames: ['bgd-embedded-diagram', 'border', 'bgdiagram']
+            });
+
+            return svg;
+        });
+
         // Look for playable moves in the description, and add preview buttons
         const OneMove = '(?:bar|\\d+)\\/(?:off|\\d+)(?:\\*|\\([234]\\))?';
         const re = new RegExp(`${OneMove}(?:[,\\s]\\s*${OneMove})*`, 'gm');
@@ -52,18 +66,6 @@ export class PositionPane extends BaseComponent {
 <button class="ms-2 btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-arrow" title="${t('tooltip-preview-arrow')}"><i class="bi bi-arrow-down-left"></i></button>
 <button class="ms-1 btn btn-outline-secondary btn-sm-inline" data-move="${match}" data-action="preview-board" title="${t('tooltip-preview-board')}"><i class="bi bi-eye"></i></button>
 </span>`.replace(/\n/g, '');
-        });
-
-        // Look for XGID image placeholders
-        const XgidPlaceholder = /\[(XGID=[-a-oA-O]{26}:\d+:-?[01]:-?1:(00|[DBR]|[1-6]{2}):\d+:\d+:[0-3]:\d+:\d+(:.+?)?)]/g;
-
-        html = html.replace(XgidPlaceholder, (_, xgid) => {
-            const svg = xgidToSvg(xgid, {
-                ...this._diagramOptions,
-                classNames: ['bgd-embedded-diagram', 'border', 'bgdiagram']
-            });
-
-            return svg;
         });
 
         return html;

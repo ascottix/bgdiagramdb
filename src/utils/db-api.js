@@ -36,7 +36,7 @@ export class BgDiagramDb {
         this.db = db;
     }
 
-    static async open() {
+    static async open(onUpgradeNeededCallback) {
         const db = await Idb.open(DbName, DbVersion, (db) => {
             // Collections
             const collections = db.createObjectStore(StoreCollections, { keyPath: 'id', autoIncrement: true });
@@ -61,6 +61,9 @@ export class BgDiagramDb {
                 const store = tx.objectStore(StoreCollections);
                 store.add({ name: 'Default' });
             }
+
+            // Invoke callback if specified
+            onUpgradeNeededCallback && onUpgradeNeededCallback(db);
         });
 
         return new BgDiagramDb(db);

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "name": "Assorted problems",
+  "desc": "A collection of mixed problems",
+  "author": "The BgDiagramDb Team",
+  "sr": true,
+  "positions": [
+    {
+      "title": "Cube action?",
+      "xgid": "XGID=aBaB--C-A---dE---d-e----B-:0:0:1:00:0:0:0:0:10",
+      "tags": [],
+      "question": "Money game. What is the cube action?",
+      "comment": "**No double, Take**\n\nOpponent started with 51, we attacked with a 55 and opponent danced on the bar.\n\nThe key point for the decision is the position of the opponent's back checker. Here it is on point 2, which is not very interesting for us. Even if we were to hit again say with 8/2, 6/2 and make the 2 point, opponent can enter on the 5 and 4 and have a good game."
+    },
+    {
+      "title": "Cube action?",
+      "xgid": "XGID=aB-B-aC-A---dE---d-e----B-:0:0:1:00:0:0:0:0:10",
+      "tags": [],
+      "question": "Money game. What is the cube action?",
+      "comment": "**Double, Take**\n\nThe opponent started with 54, we attacked with a 55 and the opponent danced on the bar.\n\nThe key point for the decision is the position of the opponent's back checker. Here, it is on our 5-point, an important one. We have a chance to hit, possibly from the midpoint, and to slot or even make the golden point.\n\nWhen the opponent is on the 4-point instead, as in the picture below, the decision becomes much closer and requires a good rollout to determine. In the end, it is still a double and a take.\n\n[XGID=aB-Ba-C-A---dE---d-e----B-:0:0:1:00:0:0:0:17:10]\n\nWhat if the opponent is on the 7-point instead?\n\n[XGID=aB-B--CaA---dE---d-e----B-:0:0:1:00:0:0:1:0:10]\n\nHere there are different opinions, but rolling out the position suggests that a double and a pass is now the best action.\n\nCheck the following video for more insights into this kind of positions:\n[Backgammon University #1 - Basic Blitz Reference Positions](https://www.youtube.com/watch?v=PQYsQHq1wt0)"
+    },
+    {
+      "title": "Best play?",
+      "xgid": "XGID=-b----E-C---dEa--c-d-a--B-:0:0:1:31:0:0:1:0:10",
+      "tags": [],
+      "question": "What is the best play?",
+      "comment": "In this position, making our 5-point would be a big blunder. \n\nInstead, we must fight for the important points in the opponent's home, and hit with 24/21*, 24/23.\n\nIf the opponent's blot is on the 5-point, we have even more reasons to hit. However, if the blot is on the 3-point, like in the picture below, then now we better make our 5-point.\n\n[XGID=-b----E-C---dEa--c-d--a-B-:0:0:1:31:0:0:1:0:10:8/5,6/5]"
+    }
+  ]
+}

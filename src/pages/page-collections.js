@@ -134,7 +134,7 @@ class PageCollections extends BaseComponent {
 
         this.on('[data-action="create"]', 'click', async () => {
             // Create new collection
-            const data = await this.$('modal-edit-collection').open(t('new-collection'), t('create'), {sr: true});
+            const data = await this.$('modal-edit-collection').open(t('new-collection'), t('create'), {name: '', desc: '', author: '', sr: true});
             if (data) {
                 await app.db.createCollection(sanitizeCollection(data));
                 this.refresh();

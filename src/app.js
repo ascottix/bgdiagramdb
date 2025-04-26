@@ -20,6 +20,7 @@
 import { BgDiagramDb } from './utils/db-api.js';
 import { fetchLanguage, getDefaultUserLanguage, t } from './utils/lang.js';
 import { setClass } from './utils/helpers.js';
+import { importCollection } from './utils/db-utils.js';
 
 export const Settings = Object.freeze({
     AppLanguage: 'appLanguage',
@@ -44,11 +45,19 @@ class App {
     }
 
     async init() {
+        let databaseUpdated = false;
+
         // Open the database
-        this.db = await BgDiagramDb.open();
+        this.db = await BgDiagramDb.open(() => { databaseUpdated = true; });
 
         // Load settings
         await this.refreshSettings();
+
+        // If first time updating the database, load demo collections
+        if(databaseUpdated) {
+            await this.importDemoCollection('demo-assorted-problems');
+            await this.importDemoCollection('demo-pipcount-tutorial-1');
+        }
     }
 
     async refreshSettings() {
@@ -78,6 +87,16 @@ class App {
         document.body.classList.add('bgdiagram__theme--' + this.settings[Settings.BgdTheme]);
         setClass(document.body, 'bgd-hide-pipcount', this.settings[Settings.BgdHidePipcount]);
         setClass(document.body, 'bgd-hide-point-numbers', this.settings[Settings.BgdHidePointNumbers]);
+    }
+
+    async importDemoCollection(name) {
+        try {
+            const data = await fetch('./assets/' + name + '.json');
+            const json = await data.json();
+            await importCollection(this.db, json);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 
