@@ -125,7 +125,8 @@
                 const color = equity <= -0.08 ? ' text-danger' : equity <= -0.02 ? ' text-success' : '';
 
                 const header = (t) => {
-                    return `<span class="fs-4${color}">${t}</span>`;
+                    if(index != 0) t = '(' + t + ')';
+                    return `<span class="fs-4${index == 0 ? '' : color}">${t}</span>`;
                 }
 
                 markdown.push(`| ${header(move.move)} | ${header(equity.toFixed(3))} |`);
