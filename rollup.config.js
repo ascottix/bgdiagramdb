@@ -24,6 +24,7 @@ export default {
         copy({
             targets: [
                 { src: 'src/index.html', dest: 'dist' },
+                { src: 'src/analysis.html', dest: 'dist' },
                 { src: 'src/assets', dest: 'dist' },
                 { src: 'src/css', dest: 'dist' }
             ]
