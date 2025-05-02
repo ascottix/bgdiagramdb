@@ -27,7 +27,11 @@
     <div class="container py-4">
         <div class="d-flex justify-content-between">
             <h1 class="display-6">BgDiagramDb Analysis</h1>
-            <div><div class="small">Powered by</div><div class="fw-bold"><a href="https://github.com/ascottix/gnubg-core" target="_blank">GNU Backgammon</a></div></div>
+            <div>
+                <div class="small">Powered by</div>
+                <div class="fw-bold"><a href="https://github.com/ascottix/gnubg-core" target="_blank">GNU Backgammon</a>
+                </div>
+            </div>
         </div>
         <div class="mb-3 row g-2">
             <div class="col-md-9">
@@ -63,7 +67,7 @@
     <script type="module">
         // Note: you need to serve this page (e.g. with "npx serve ."), it doesn't work with file://
         import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@latest/dist/bgdiagram.min.js';
-        import { initGnubgCore } from 'https://cdn.jsdelivr.net/gh/ascottix/gnubg-core@v1.0.9/dist/gnubg-core.js';
+        import { initGnubgCore } from 'https://cdn.jsdelivr.net/gh/ascottix/gnubg-core@v1.0.10/dist/gnubg-core.js';
 
         const diagramOptions = {}
 
@@ -108,10 +112,52 @@
                 (best == 0 ? (data.equity[1] < data.equity[2] ? ', take' : ', pass') : ''));
         }
 
+        function formatMove(move) {
+            let steps = move.split(' ').map(step => {
+                const [from, to] = step.split('/').map(p => parseInt(p));
+                return { from, to, n: 1, cap: step.indexOf('*') > 0 ? 1 : 0 };
+            });
+
+            // Sort moves by descending point order
+            steps.sort((a, b) => b.from - a.from || b.to - a.to || b.cap - a.cap);
+
+            // Merge identical moves
+            for (let i = steps.length - 1; i > 0; i--) {
+                if (steps[i].from == steps[i - 1].from && steps[i].to == steps[i - 1].to) {
+                    steps[i - 1].n += steps[i].n;
+                    steps[i] = null;
+                }
+            }
+
+            // Eliminate moves that have become redundant after the previous merge
+            steps = steps.filter(step => step != null);
+
+            // Merge move sequences where a move starts exactly where the previous ends
+            for (let i = steps.length - 1; i > 0; i--) {
+                for (let j = i - 1; j >= 0; j--) {
+                    if (steps[i].from == steps[j].to && steps[i].n >= steps[j].n && !steps[j].cap) {
+                        steps[j].to = steps[i].to;
+                        steps[j].cap = steps[i].cap;
+                        steps[i].n -= steps[j].n;
+                        break;
+                    }
+                }
+            }
+
+            // Eliminate moves that have become redundant after the previous merge
+            steps = steps.filter(step => step.n > 0);
+
+            // Join all steps in a single string
+            const text = steps.map(step => step.from + '/' + step.to + (step.cap ? '*' : '') + (step.n > 1 ? `(${step.n})` : '')).join(' ');
+
+            // Replace 25 and 0 with "bar" and "off"
+            return text.replace(/25/g, 'bar').replace(/\/0/g, '/off');
+        }
+
         function renderPlayAction(markdown, res) {
             const moves = res.data;
 
-            markdown.push('# ' + moves[0].move);
+            markdown.push('# ' + formatMove(moves[0].move));
             markdown.push('---');
             markdown.push('| Move | Equity |');
             markdown.push('| --- | --- |');
@@ -125,11 +171,11 @@
                 const color = equity <= -0.08 ? ' text-danger' : equity <= -0.02 ? ' text-success' : '';
 
                 const header = (t, isEquity) => {
-                    if(index != 0 && isEquity) t = '(' + t + ')';
+                    if (index != 0 && isEquity) t = '(' + t + ')';
                     return `<span class="fs-4${index == 0 ? '' : color}">${t}</span>`;
                 }
 
-                markdown.push(`| ${header(move.move)} | ${header(equity.toFixed(3), true)} |`);
+                markdown.push(`| ${header(formatMove(move.move), false)} | ${header(equity.toFixed(3), true)} |`);
                 markdown.push(`| P: ${p(0)} ${p(1)} ${p(2)} | O: ${p(5)} ${p(3)} ${p(4)} |`);
             });
         }
@@ -146,8 +192,8 @@
             const startTime = Date.now();
             const res = gnuBgCore.hint(xgid, evalDepth);
             const elapsedTime = Date.now() - startTime;
-            console.log('Done in', elapsedTime, 'ms');
-            console.log(res);
+            if (0) console.log('Analysis done in', elapsedTime, 'ms');
+            if (0) console.log(res);
 
             const markdown = [];
 
@@ -188,7 +234,6 @@
         const params = new URLSearchParams(window.location.search);
 
         const bsTheme = params.get('appTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        console.log(bsTheme);
         document.documentElement.setAttribute('data-bs-theme', bsTheme);
 
         const bgdTheme = params.get('bgdTheme');
