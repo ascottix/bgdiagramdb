@@ -95,7 +95,7 @@ export class TaglistInputField extends HTMLElement {
             }
         });
 
-        this._tagInput.addEventListener('blur', e => {
+        this._tagInput.addEventListener('blur', () => {
             commitTags();
         });
 
