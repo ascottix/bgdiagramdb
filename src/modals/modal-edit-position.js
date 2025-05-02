@@ -97,6 +97,34 @@ class ModalEditPosition extends HTMLElement {
         }
     }
 
+    connectedCallback() {
+        this.addEventListener('paste', (event) => {
+            const target = event.target;
+            if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') return;
+
+            let pastedText = (event.clipboardData || window.clipboardData).getData('text');
+
+            if (BgBoard.isValidGnuBgId(pastedText) || BgBoard.isValidXgid(pastedText)) {
+                this.querySelector('[data-field="xgid"]').value = pastedText;
+                this.refreshDiagram();
+            }
+        });
+
+        // Shortcut for saving (Ctrl + Shift + S)
+        this.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() == 's') {
+                event.preventDefault();
+                this.querySelector('[data-action="save"]').click();
+            }
+        });
+
+        this.querySelector('[data-field="xgid"]').addEventListener('input', () => {
+            this.refreshDiagram();
+        });
+
+        initTooltips(this);
+    }
+
     async open(titleText, submitText, data) {
         this.querySelector('.modal-title').textContent = titleText;
         this.querySelector('[data-action="save"]').textContent = submitText;
@@ -116,25 +144,7 @@ class ModalEditPosition extends HTMLElement {
 
         translateComponent(this);
 
-        initTooltips(this);
-
         this.refreshDiagram();
-
-        this.addEventListener('paste', (event) => {
-            const target = event.target;
-            if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') return;
-
-            let pastedText = (event.clipboardData || window.clipboardData).getData('text');
-
-            if (BgBoard.isValidGnuBgId(pastedText) || BgBoard.isValidXgid(pastedText)) {
-                this.querySelector('[data-field="xgid"]').value = pastedText;
-                this.refreshDiagram();
-            }
-        });
-
-        this.querySelector('[data-field="xgid"]').addEventListener('input', () => {
-            this.refreshDiagram();
-        });
 
         const action = await showModal(this.querySelector('.modal'), (action) => {
             if (action == 'save') {
@@ -148,9 +158,6 @@ class ModalEditPosition extends HTMLElement {
 
             return action == 'cancel';
         });
-
-        // TODO: remove the listeners
-        // TODO: remove the tooltips
 
         return action == 'save' ? collectFields(this) : null;
     }
