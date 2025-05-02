@@ -83,12 +83,20 @@ export class TaglistInputField extends HTMLElement {
     connectedCallback() {
         this._tagInput = this.querySelector(`#${this._tagInputId}`);
 
+        const commitTags = () => {
+            const tags = this._tagInput.value.split(/[,\s]+/); // On mobile we may not get all events
+            tags.forEach(tag => this.addTag(tag));
+        }
+
         this._tagInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ' || e.key === ',' || e.key === 'Tab') {
+            if (e.key === ' ' || e.key === ',') {
                 e.preventDefault();
-                const tags = this._tagInput.value.split(/[,\s]+/); // On mobile we may not get all events
-                tags.forEach(tag => this.addTag(tag));
+                commitTags();
             }
+        });
+
+        this._tagInput.addEventListener('blur', e => {
+            commitTags();
         });
 
         this.addEventListener('click', (event) => {
