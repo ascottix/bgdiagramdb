@@ -45,6 +45,7 @@ export const EnCatalog = {
         "copy-to-clipboard": "Copy to clipboard",
         "create": "Create",
         "create-new-collection": "Create",
+        "days-since-last-backup": "Last backup has been performed {elapsed-days} ago.",
         "db-empty": "Your database is empty.",
         "db-summary": "Your database contains {collections} and {positions}.",
         "delete": "Delete",
@@ -88,6 +89,7 @@ export const EnCatalog = {
         "new-collection": "New collection",
         "new-position": "New position",
         "next": "Next",
+        "no-backups-found": "No backups have ever been made yet.",
         "numbered-list": "Numbered list",
         "ok": "Ok",
         "optional-question": "If present, this question will be used in the {#train}: {#train-positions} section.",
@@ -193,6 +195,11 @@ export const EnCatalog = {
             "other": "<b>{n}</b> collections"
         },
         "days": {
+            "one": "{n} day",
+            "other": "{n} days"
+        },
+        "elapsed-days": {
+            "zero": "less than one day",
             "one": "{n} day",
             "other": "{n} days"
         },

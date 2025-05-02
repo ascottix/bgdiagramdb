@@ -139,7 +139,7 @@ class PageSettings extends HTMLElement {
     ${t('settings-backup-restore')}
   </div>
   <div class="card-body">
-    <p class="mb-3">${t('settings-backup-restore-intro')}</p>
+    <p class="mb-3">${t('settings-backup-restore-intro')} <span id="lastBackupInfo"></span></p>
 
     <div class="d-flex flex-column flex-sm-row gap-2">
       <button data-action="backup" class="btn btn-outline-primary" id="backupBtn">${t('settings-backup')}</button>
@@ -235,6 +235,8 @@ class PageSettings extends HTMLElement {
             const timestamp = new Date().toISOString().substring(0, 17).replace(/[-:]/g, '').replace('T', '_');
             const filename = 'bgdiagramdb_backup_' + timestamp + '.json';
             downloadDataAsJson(backup, filename);
+            await app.refreshSettings();
+            this.updateBackupStatus();
         });
 
         this.querySelector('[data-action="restore"]').addEventListener('click', async () => {
@@ -249,6 +251,16 @@ class PageSettings extends HTMLElement {
         });
     }
 
+    updateBackupStatus() {
+        const lastBackup = app.settings[Settings._LastBackupTime];
+        const isActualBackup = app.settings[Settings._LastBackupNumCollections] != null;
+        const daysSinceLastBackup = Math.round((Date.now() - lastBackup) / (24 * 60 * 60 * 1000));
+
+        const msg = isActualBackup ? t('days-since-last-backup', { 'elapsed-days': daysSinceLastBackup }) : t('no-backups-found');
+
+        this.querySelector('#lastBackupInfo').innerHTML = msg;
+    }
+
     async refresh(rebuild) {
         await app.refreshSettings();
 
@@ -258,6 +270,8 @@ class PageSettings extends HTMLElement {
         }
 
         populateFields(this, app.settings);
+
+        this.updateBackupStatus();
 
         // Diagram preview
         this.querySelector('.card').innerHTML = xgidToSvg('XGID=-b----E-C---eE---c-e----B-:0:0:1:00:0:0:0:0:6');
@@ -283,6 +297,8 @@ class PageSettings extends HTMLElement {
 
                     await importDatabase(app.db, data);
 
+                    await app.refreshSettings();
+                    this.updateBackupStatus();
                     showToast(t('toast-database-restored', data));
                 } catch (e) {
                     const msg = t(e.message);

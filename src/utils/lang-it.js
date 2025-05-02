@@ -45,6 +45,7 @@ export const ItCatalog = {
         "copy-to-clipboard": "Copia negli appunti",
         "create": "Crea",
         "create-new-collection": "Crea",
+        "days-since-last-backup": "L'ultimo backup è stato effettuato {elapsed-days} fa.",
         "db-empty": "Il tuo database è vuoto.",
         "db-summary": "Il tuo database contiene {collections} e {positions}.",
         "delete": "Elimina",
@@ -88,6 +89,7 @@ export const ItCatalog = {
         "new-collection": "Nuova raccolta",
         "new-position": "Nuova posizione",
         "next": "Avanti",
+        "no-backups-found": "Non sono ancora mai stati effettuati backup.",
         "numbered-list": "Lista numerata",
         "ok": "Ok",
         "optional-question": "Se presente, questa domanda sarà usata nella sezione {#train}: {#train-positions}.",
@@ -193,6 +195,11 @@ export const ItCatalog = {
             "other": "<b>{n}</b> raccolte"
         },
         "days": {
+            "one": "{n} giorno",
+            "other": "{n} giorni"
+        },
+        "elapsed-days": {
+            "zero": "meno di un giorno",
             "one": "{n} giorno",
             "other": "{n} giorni"
         },

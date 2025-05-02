@@ -97,7 +97,7 @@ export function t(key, params) {
                 const param = data.params[keyParam || keyValue];
 
                 if (param) {
-                    const pluralRule = data.pluralRules.select(value);
+                    const pluralRule = value === 0 ? 'zero' : data.pluralRules.select(value);
                     const pluralForm = param[pluralRule] || param.other;
 
                     return pluralForm.replace("{n}", value);

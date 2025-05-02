@@ -21,6 +21,7 @@ import { sanitizeHtml } from './fields.js';
 import { State } from './fsrs45.js';
 import { Idb } from './indexeddb.js';
 import { BgBoard } from './bgboard.js';
+import { Settings } from '../app.js';
 
 /**
  * Sanitizes a collection object.
@@ -163,6 +164,12 @@ export async function importCollection(db, data) {
     return id_coll;
 }
 
+export async function updateLastBackupTime(db, numCollections, numPositions) {
+    await db.setSetting(Settings._LastBackupTime, Date.now());
+    await db.setSetting(Settings._LastBackupNumCollections, numCollections || 0);
+    await db.setSetting(Settings._LastBackupNumPositions, numPositions || 0);
+}
+
 /**
  * Exports the database as a JSON object.
  *
@@ -176,6 +183,8 @@ export async function exportDatabase(db) {
 
     data.collections = await db.collections().list(tx);
     data.positions = await db.positions().list(tx);
+
+    await updateLastBackupTime(db, data.collections.length, data.positions.length);
 
     return {
         version: db.version,
@@ -227,4 +236,6 @@ export async function importDatabase(db, backup) {
         if(!Number.isInteger(coll.id)) continue;
         await synchSpacedRepetitionFlag(db, coll.id);
     }
+
+    return updateLastBackupTime(db, data.collections.length, data.positions.length);
 }
