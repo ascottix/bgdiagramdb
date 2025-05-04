@@ -92,12 +92,13 @@
         function renderCubeAction(markdown, res) {
             const data = res.data;
             const optimal = data.equity[3];
-            const actions = ['No double', 'Double, take', 'Double, pass'];
-            const best = optimal == data.equity[0] ? 0 : optimal == data.equity[1] ? 1 : 2;
+            const actions = ['No double', 'Double / Take', 'Double / Pass'];
+            const idxBest = optimal == data.equity[0] ? 0 : optimal == data.equity[1] ? 1 : 2;
 
-            const equity = (eq) => {
+            const equity = (index) => {
+                const eq = data.equity[index];
                 const delta = eq - optimal;
-                return `**${signed(eq)}** (${signed(delta)})`;
+                return `**${signed(eq)}**` + (index == idxBest ? '': ` (${signed(delta)})`);
             }
 
             markdown.push('# ' + capitalize(res.action));
@@ -105,11 +106,11 @@
             markdown.push('| Action | Equity |');
             markdown.push('| --- | --- |');
             actions.forEach((action, index) => {
-                markdown.push(`| ${action} | ${equity(data.equity[index])} |`);
+                markdown.push(`| ${action} | ${equity(index)} |`);
             });
             markdown.push('\n');
-            markdown.push('Best choice: ' + actions[best].toLocaleLowerCase() +
-                (best == 0 ? (data.equity[1] < data.equity[2] ? ', take' : ', pass') : ''));
+            markdown.push('Best choice: ' + actions[idxBest] +
+                (idxBest == 0 ? (data.equity[1] < data.equity[2] ? ' / Take' : ' / Pass') : ''));
         }
 
         function formatMove(move) {
