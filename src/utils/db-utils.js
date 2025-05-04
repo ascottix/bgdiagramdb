@@ -55,8 +55,12 @@ export function sanitizePosition(pos) {
 
     if (typeof pos.sr == 'object') {
         const state = pos.sr.state;
-        if (
-            (state == State.New || state == State.Learning || state == State.Relearning || state == State.Review)
+        if (state == State.New) {
+            result.sr = {
+                state
+            }
+        } else if (
+            (state == State.Learning || state == State.Relearning || state == State.Review)
             && Number.isInteger(pos.sr.reps)
             && Number.isInteger(pos.sr.lapses)
             && Number.isInteger(pos.sr.lastReview)
@@ -159,8 +163,6 @@ export async function importCollection(db, data) {
         await db.addPosition(sanitizePosition(pos), tx); // Make sure positions are added in the original order (don't async)
     }
 
-    await synchSpacedRepetitionFlag(db, id_coll);
-
     return id_coll;
 }
 
@@ -219,22 +221,17 @@ export async function importDatabase(db, backup) {
     db.positions().clear(tx);
 
     for (const coll of data.collections) {
-        if(!Number.isInteger(coll.id)) continue;
+        if (!Number.isInteger(coll.id)) continue;
         const newId = await db.createCollection(sanitizeCollection(coll), tx);
         collIdIndex[coll.id] = newId; // Remember the new ID of the collection
     }
 
     for (const pos of data.positions) {
-        if(!Number.isInteger(pos.id)) continue;
+        if (!Number.isInteger(pos.id)) continue;
         const collId = collIdIndex[pos.id_coll];
-        if(!collId) continue;
+        if (!collId) continue;
         pos.id_coll = collId; // Remap the old collection ID to the new one
         await db.addPosition(sanitizePosition(pos), tx);
-    }
-
-    for (const coll of data.collections) {
-        if(!Number.isInteger(coll.id)) continue;
-        await synchSpacedRepetitionFlag(db, coll.id);
     }
 
     return updateLastBackupTime(db, data.collections.length, data.positions.length);
