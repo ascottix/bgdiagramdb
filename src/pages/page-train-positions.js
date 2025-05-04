@@ -190,6 +190,7 @@ button > small {
             // The deck is finished, but in the meanwhile there may be more due cards to review
             if (this._deck.length < this.getMaxTotalCards(+Infinity)) {
                 await this.appendDueCardsToDeck(this.now() + 60 * 1000); // Include one minute in the future
+                this._deck = this._deck.slice(0, this.getMaxTotalCards(this._deck.length));
             }
 
             // If there are no new cards to show, we're done
