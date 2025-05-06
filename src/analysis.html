@@ -18,7 +18,7 @@
         }
 
         tr>td:not(:last-child) {
-            padding-right: 2em;
+            padding-right: 1em;
         }
     </style>
 </head>
@@ -67,7 +67,7 @@
     <script type="module">
         // Note: you need to serve this page (e.g. with "npx serve ."), it doesn't work with file://
         import { BgDiagram } from 'https://cdn.jsdelivr.net/gh/ascottix/bgdiagram@latest/dist/bgdiagram.min.js';
-        import { initGnubgCore } from 'https://cdn.jsdelivr.net/gh/ascottix/gnubg-core@v1.0.10/dist/gnubg-core.js';
+        import { initGnubgCore } from 'https://cdn.jsdelivr.net/gh/ascottix/gnubg-core@v1.0.11/dist/gnubg-core.js';
 
         const diagramOptions = {}
 
@@ -98,17 +98,38 @@
             const equity = (index) => {
                 const eq = data.equity[index];
                 const delta = eq - optimal;
-                return `**${signed(eq)}**` + (index == idxBest ? '': ` (${signed(delta)})`);
+                return `**${signed(eq)}**` + (index == idxBest ? '' : ` (${signed(delta)})`);
+            }
+
+            const p = (i) => {
+                const e = i == 5 ? 1 - data.wc[0] : data.wc[i];
+                return (e * 100).toFixed(1) + '';
             }
 
             markdown.push('# ' + capitalize(res.action));
             markdown.push('---');
+
+            const mr = '';
+            markdown.push(`|  | W${mr} | WG${mr} | WB${mr} | L${mr} | LG${mr} | LB${mr} |`);
+            markdown.push('| --- | --- | --- | --- | --- | --- | --- |');
+            markdown.push(`| Winning chances:&nbsp;&nbsp; | ${p(0)} | ${p(1)} | ${p(2)} |${p(5)} | ${p(3)} | ${p(4)} |`);
+            markdown.push('<br>');
+            markdown.push('| Cubeless equity: | ' + data.ce.toFixed(3));
+
+            markdown.push('');
+
+            markdown.push('<br>');
+            markdown.push('');
+
             markdown.push('| Action | Equity |');
             markdown.push('| --- | --- |');
             actions.forEach((action, index) => {
                 markdown.push(`| ${action} | ${equity(index)} |`);
             });
-            markdown.push('\n');
+
+            markdown.push('<br>');
+            markdown.push('');
+
             markdown.push('Best choice: ' + actions[idxBest] +
                 (idxBest == 0 ? (data.equity[1] < data.equity[2] ? ' / Take' : ' / Pass') : ''));
         }
