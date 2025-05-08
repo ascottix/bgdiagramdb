@@ -200,7 +200,8 @@ class PageSettings extends HTMLElement {
         this.querySelector(`[name="${Settings.AppLanguage}"]`).set([
             { text: 'Auto', value: '' },
             { text: 'English', value: 'en' },
-            { text: 'Italiano', value: 'it' }]);
+            { text: 'Italiano', value: 'it' },
+            { text: '中文', value: 'zh' }]);
 
         this.querySelector(`[name="${Settings.AppTheme}"]`).set([
             { text: t('theme-auto'), value: '' },

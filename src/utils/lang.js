@@ -28,7 +28,7 @@ const catalog = {};
 function onCatalogLoaded(lang) {
     catalog[lang].pluralRules = new Intl.PluralRules(lang, { type: 'cardinal' });
     catalog[lang].messages._appName = 'BgDiagramDb';
-    catalog[lang].messages._githubHomepageLink = '<a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>';
+    catalog[lang].messages._githubHomepageLink = '<a href="https://github.com/ascottix/bgdiagramdb" target="_blank" rel="noopener">GitHub</a>';
 }
 
 // Preload English and Italian
@@ -56,7 +56,7 @@ export function getDefaultUserLanguage() {
  */
 export async function fetchLanguage(lang) {
     if (!catalog[lang]) {
-        const response = await fetch(`./lang/${lang}.json`);
+        const response = await fetch(`./assets/lang/${lang}.json`);
         const data = await response.json();
 
         catalog[lang] = data;
