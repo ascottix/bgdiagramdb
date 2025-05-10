@@ -148,14 +148,33 @@
 
             markdown.push('<br>');
 
-            let bestChoice = actions[idxBest];
+            const Choices = [
+                'Double / Take',
+                'Double / Pass',
+                'No double / Take',
+                'Too good to double / Take',
+                'Too good to double / Pass',
+                null,
+                null,
+                'Redouble / Take',
+                'Redouble / Pass',
+                'No redouble / Take',
+                'Too good to redouble / Take',
+                'Too good to redouble / Pass',
+                null,
+                'No double (dead cube)',
+                'No redouble (dead cube)',
+                'n/a',
+                'Optional double / Take',
+                'Optional redouble / Take',
+                null,
+                'Optional double / Pass',
+                'Optional redouble / Pass'
+            ];
 
-            if(idxBest == 0 && data.cd >= 3 && data.cd <= 4) {
-                bestChoice = 'Too good to double';
-            }
+            const bestChoice = Choices[data.cd] || 'n/a';
 
-            markdown.push('Best choice: |' + bestChoice +
-                (idxBest == 0 ? (data.equity[1] < data.equity[2] ? ' / Take' : ' / Pass') : ''));
+            markdown.push('Best choice: |' + bestChoice);
         }
 
         function formatMove(move) {
