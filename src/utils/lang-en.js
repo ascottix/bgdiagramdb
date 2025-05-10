@@ -155,6 +155,7 @@ export const EnCatalog = {
         "tooltip-edit-collection": "Edit this collection name and description",
         "tooltip-edit-position": "Edit this position",
         "tooltip-export-collection": "Export this collection to a file",
+        "tooltip-session-duration": "Session duration",
         "tooltip-preview-arrow": "Show the move with arrows",
         "tooltip-preview-board": "Show the move on the board",
         "tooltip-train-pip-time-stats": "Answer time: average / min - max",
@@ -202,6 +203,10 @@ export const EnCatalog = {
             "zero": "less than one day",
             "one": "{n} day",
             "other": "{n} days"
+        },
+        "elapsed-minutes": {
+            "zero": "< 1 min",
+            "other": "{n} min"
         },
         "hours": {
             "one": "{n} hour",

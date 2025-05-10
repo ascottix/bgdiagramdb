@@ -136,6 +136,7 @@
         "tooltip-edit-collection": "编辑此集合的名称和描述",
         "tooltip-edit-position": "编辑此位置",
         "tooltip-export-collection": "将此集合导出到文件",
+        "tooltip-session-duration": "会话时长",
         "tooltip-preview-arrow": "用箭头显示棋步",
         "tooltip-preview-board": "在棋盘上显示棋步",
         "tooltip-train-pip-time-stats": "回答时间：平均 / 最短 - 最长",
@@ -177,6 +178,9 @@
         "days": {
             "one": "{n} 天",
             "other": "{n} 天"
+        },
+        "elapsed-minutes": {
+            "other": "{n} 分钟"
         },
         "elapsed-days": {
             "other": "{n} 天"

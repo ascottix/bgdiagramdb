@@ -155,6 +155,7 @@ export const ItCatalog = {
         "tooltip-edit-collection": "Modifica il nome e la descrizione di questa raccolta",
         "tooltip-edit-position": "Modifica questa posizione",
         "tooltip-export-collection": "Esporta questa raccolta in un file",
+        "tooltip-session-duration": "Durata della sessione",
         "tooltip-preview-arrow": "Mostra la mossa con le frecce",
         "tooltip-preview-board": "Mostra la mossa sul board",
         "tooltip-train-pip-time-stats": "Tempo di risposta: medio / min - max",
@@ -202,6 +203,10 @@ export const ItCatalog = {
             "zero": "meno di un giorno",
             "one": "{n} giorno",
             "other": "{n} giorni"
+        },
+        "elapsed-minutes": {
+            "zero": "< 1 min",
+            "other": "{n} min"
         },
         "hours": {
             "one": "{n} ora",

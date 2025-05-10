@@ -28,6 +28,7 @@ import { BaseComponent } from '../components/base-component.js';
 import '../components/collapsible-howto.js';
 import '../components/select-field.js';
 import '../components/slide-carousel.js';
+import '../components/train-positions-stats.js';
 
 class PageTrainPositions extends BaseComponent {
     constructor() {
@@ -59,8 +60,13 @@ button > small {
         <div class="fs-5" ${DataTranslate}="train-pos-session-preview"></div>
     </div>
 </div>
+
+<div id="tp-header" class="d-none d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+  <h1 class="h4 mb-2 mb-md-0">${t('train')}<i class="bi bi-arrow-right-short fs-3"></i>${t('train-positions')}</h1>
+  <train-positions-stats></train-positions-stats>
+</div>
+
 <div id="tp-card" class="d-none">
-    <h1 class="h4 mb-2">${t('train')} → ${t('train-positions')}</h1>
     <div id="tp-card-toolbar" class="d-flex justify-content-center gap-3 mb-2">
         <button class="invisible btn"><small>&nbsp;</small>&nbsp;</button>
         <button class="btn btn-secondary" data-action="show-answer"><i class="bi bi-eye"></i> ${t('show-answer')}</button>
@@ -137,6 +143,7 @@ button > small {
 
         // Remember the start time of the session, so we can show the session duration at the end
         this._sessionStartTime = Date.now();
+        this._sessionWrong = 0;
     }
 
     showCurrentQuestion() {
@@ -153,6 +160,7 @@ button > small {
 
         this.hide('#tp-controls');
         this.show('#tp-card');
+        this.show('#tp-header');
         this.show('[data-action="show-answer"]');
         this.$$('[data-mode="card-back"]').forEach(e => this.hide(e));
     }
@@ -179,6 +187,17 @@ button > small {
         pos.sr = this._fsrs45.updateCardAfterReview(pos.sr, this._currentCardAnswerTime, rating);
 
         await app.db.updatePosition(pos);
+
+        if(rating == Rating.Again) {
+            this._sessionWrong++;
+        }
+
+        const totalCards = this._deckIndex + 1;
+        const sessionRight = totalCards - this._sessionWrong;
+        const sessionDuration = Date.now() - this._sessionStartTime;
+        const sessionDurationMin = Math.max(1, Math.round(sessionDuration / 1000 / 60));
+
+        this.$('train-positions-stats').updateStats(totalCards, sessionRight, this._sessionWrong, sessionDurationMin);
 
         this.advanceToNextCard();
     }
