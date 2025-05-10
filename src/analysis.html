@@ -128,9 +128,14 @@
             });
 
             markdown.push('<br>');
-            markdown.push('');
 
-            markdown.push('Best choice: ' + actions[idxBest] +
+            let bestChoice = actions[idxBest];
+
+            if(idxBest == 0 && data.cd >= 3 && data.cd <= 4) {
+                bestChoice = 'Too good to double';
+            }
+
+            markdown.push('Best choice: |' + bestChoice +
                 (idxBest == 0 ? (data.equity[1] < data.equity[2] ? ' / Take' : ' / Pass') : ''));
         }
 
