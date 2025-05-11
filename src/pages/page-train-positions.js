@@ -181,13 +181,14 @@ button > small {
     }
 
     async rateCurrentCard(rating) {
-        // Do not modify the deck, it would alter the final stats
-        const pos = structuredClone(this._deck[this._deckIndex]);
+        // Update database for the current position
+        const pos = await app.db.getPosition(this._deck[this._deckIndex].id);
 
         pos.sr = this._fsrs45.updateCardAfterReview(pos.sr, this._currentCardAnswerTime, rating);
 
         await app.db.updatePosition(pos);
 
+        // Update stats
         if(rating == Rating.Again) {
             this._sessionWrong++;
         }
@@ -199,6 +200,7 @@ button > small {
 
         this.$('train-positions-stats').updateStats(totalCards, sessionRight, this._sessionWrong, sessionDurationMin);
 
+        // Go to the next card
         this.advanceToNextCard();
     }
 
