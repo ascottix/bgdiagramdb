@@ -161,7 +161,7 @@ button.btn-sm-inline {
 <div class="container-fluid p-0" data-xgid="${escapeHtmlAttr(pos.xgid)}">
   <div class="row">
     <div class="d-flex align-items-center justify-content-center">
-      <div class="fs-3 mb-2">${pos.title || ''}</div> ${this._isCard ? '' : '<tag-pills class="ms-3 mb-2" tags="' + pos.tags.join(',') + '"></tag-pills>'}
+      <div class="fs-3 mb-2"><span class="${this._isCard ? 'hide-if-front-card d-none ' : ''}">${pos.title || ''}</span>&nbsp;</div><tag-pills class="${this._isCard ? 'hide-if-front-card d-none ' : ''}ms-3 mb-2" tags="${pos.tags.join(',')}"></tag-pills>
     </div>
     <div class="col-12 col-md-6 mb-3">
       <div id="mainDiagram" class="card border rounded overflow-hidden">${svg}</div>
