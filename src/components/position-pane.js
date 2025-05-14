@@ -125,7 +125,7 @@ export class PositionPane extends BaseComponent {
 
     flip() {
         this.$('.flip-card').classList.toggle('flip-card__flipped');
-        this.$('.hide-if-front-card').classList.toggle('d-none');
+        this.$$('.hide-if-front-card').forEach(e => e.classList.toggle('d-none'));
     }
 
     isLegalPos() {
