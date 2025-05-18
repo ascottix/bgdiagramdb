@@ -49,7 +49,7 @@ class PageSettings extends HTMLElement {
       data-bs-parent="#settingsAccordion">
       <div class="accordion-body">
         <div class="row g-3">
-          <div class="col-md-6"><select-field name="${Settings.AppLanguage}" label="${t('language')}"></select-field>
+          <div class="col-md-6"><select-field name="${Settings.AppLanguage}" label="<i class='bi bi-translate me-1'></i>${t('language')}"></select-field>
           </div>
           <div class="col-md-6"><select-field name="${Settings.AppTheme}" label="${t('theme')}"></select-field></div>
         </div>
@@ -199,8 +199,16 @@ class PageSettings extends HTMLElement {
 
         this.querySelector(`[name="${Settings.AppLanguage}"]`).set([
             { text: 'Auto', value: '' },
+            { text: 'Български (Създадено от ИИ)', value: 'bg' },
+            { text: 'Deutsch (KI-generiert)', value: 'de' },
+            { text: 'Ελληνικά (Δημιουργήθηκε από AI)', value: 'el' },
             { text: 'English', value: 'en' },
+            { text: 'Español (Generado por IA)', value: 'es' },
+            { text: 'Français (Généré par IA)', value: 'fr' },
             { text: 'Italiano', value: 'it' },
+            { text: '日本語（AI生成）', value: 'ja' },
+            { text: 'Português (Gerado por IA)', value: 'pt' },
+            { text: 'Türkçe (Yapay Zeka tarafından oluşturuldu)', value: 'tr' },
             { text: '中文', value: 'zh' }]);
 
         this.querySelector(`[name="${Settings.AppTheme}"]`).set([
