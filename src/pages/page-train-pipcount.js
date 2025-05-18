@@ -64,7 +64,7 @@ class PageTrainPipcount extends BaseComponent {
         this._currentPosStartTime = Date.now();
         const carousel = this.$('slide-carousel');
         const id = 'card-' + this._currentPosIndex;
-        const html = `<position-pane card compact id="${id}"></position-pane>`;
+        const html = `<position-pane card compact data-pipcount id="${id}"></position-pane>`;
         if (this._cards.length == 0) {
             carousel.init(html);
         } else {

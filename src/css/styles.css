@@ -14,7 +14,7 @@ body {
 }
 
 /* Markdown tables */
-.markdown tr > td:not(:last-child) {
+.markdown tr>td:not(:last-child) {
     padding-right: 2em;
 }
 
@@ -51,6 +51,11 @@ body {
     font-size: 4em !important;
 }
 
+/* Pipcount */
+position-pane[data-pipcount] [data-title] {
+    height: 1em;
+}
+
 /* Card */
 .flip-card__container {
     perspective: 1000px;
@@ -65,7 +70,8 @@ body {
     backface-visibility: hidden;
 }
 
-.flip-card__front, .flip-card__back {
+.flip-card__front,
+.flip-card__back {
     width: 100%;
     height: 100%;
     position: absolute;
