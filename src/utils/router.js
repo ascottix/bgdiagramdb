@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License along with
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
-import { removeTooltip } from './helpers.js';
+import { openAnalysisWindow, removeTooltip } from './helpers.js';
 
 /**
  * Removes the query string from the hash part of the URL.
@@ -88,5 +88,10 @@ export function showPage(page) {
  * @param {string} page - The page identifier to be set as active.
  */
 export function setActivePage(page) {
-    location.hash = '#' + page;
+    if(page == 'analyze') {
+        // This opens in a different window
+        openAnalysisWindow();
+    } else {
+        location.hash = '#' + page;
+    }
 }

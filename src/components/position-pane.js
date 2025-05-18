@@ -18,7 +18,7 @@
     BgDiagramDb. If not, see <https://www.gnu.org/licenses/>.
 */
 import { t } from '../utils/lang.js';
-import { copyToClipboard, openAnalysis, showToast, stripXgidAnnotations, xgidToSvg } from '../utils/helpers.js';
+import { copyToClipboard, openAnalysisWindow, showToast, stripXgidAnnotations, xgidToSvg } from '../utils/helpers.js';
 import { escapeHtmlAttr, getUniqueId } from '../utils/fields.js';
 import { BgBoard } from '../utils/bgboard.js';
 
@@ -160,7 +160,7 @@ button.btn-sm-inline {
 </style>
 <div class="container-fluid p-0" data-xgid="${escapeHtmlAttr(pos.xgid)}">
   <div class="row">
-    <div class="d-flex align-items-center justify-content-center">
+    <div data-title class="d-flex align-items-center justify-content-center">
       <div class="fs-3 mb-2"><span class="${this._isCard ? 'hide-if-front-card d-none ' : ''}">${pos.title || ''}</span>&nbsp;</div><tag-pills class="${this._isCard ? 'hide-if-front-card d-none ' : ''}ms-3 mb-2" tags="${pos.tags ? pos.tags.join(',') : ''}"></tag-pills>
     </div>
     <div class="col-12 col-md-6 mb-3">
@@ -202,7 +202,7 @@ button.btn-sm-inline {
                     await copyToClipboard(stripXgidAnnotations(xgid));
                     showToast(t('toast-xgid-copied-to-clipboard'));
                 } else if (action == 'analyze') {
-                    openAnalysis(xgid);
+                    openAnalysisWindow(xgid);
                 } else if (action && move) {
                     // Highlight the move text
                     const span = target.closest('span').firstElementChild;

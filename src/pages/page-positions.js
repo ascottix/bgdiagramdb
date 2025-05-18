@@ -20,7 +20,7 @@
 import { app } from '../app.js';
 import { DataTranslate, t, translateComponent } from '../utils/lang.js';
 import { Idb } from '../utils/indexeddb.js';
-import { getDataAttributes, openAnalysis, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
+import { getDataAttributes, openAnalysisWindow, removeTooltip, initTooltips, setClass, showToast } from '../utils/helpers.js';
 import { sanitizePosition, synchSpacedRepetitionFlag } from '../utils/db-utils.js';
 import { getQueryParams, setQueryParams } from '../utils/router.js';
 
@@ -225,7 +225,7 @@ class PagePositions extends BaseComponent {
                     case 'analyze-pos':
                         {
                             const pos = await app.db.getPosition(Number(detail.posid));
-                            openAnalysis(pos.xgid);
+                            openAnalysisWindow(pos.xgid);
                         }
                         break;
                     case 'view-pos':

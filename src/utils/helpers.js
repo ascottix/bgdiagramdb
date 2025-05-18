@@ -329,16 +329,14 @@ export function stripXgidAnnotations(xgid) {
     return xgid.split(':').slice(0, 10).join(':');
 }
 
-export function openAnalysis(xgid) {
-    xgid = stripXgidAnnotations(xgid);
-
+export function openAnalysisWindow(xgid) {
     const params = [];
 
     function addParam(name, value) {
         value && params.push(`${name}=${encodeURIComponent(value)}`);
     }
 
-    addParam('xgid', xgid);
+    xgid && addParam('xgid', stripXgidAnnotations(xgid));
     addParam('d', 2);
     addParam('_ts', Date.now());
     addParam('lang', app.settings[Settings.AppLanguage]);
